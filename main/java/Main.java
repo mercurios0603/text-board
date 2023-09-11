@@ -52,10 +52,38 @@ public class Main {
                 System.out.println("게시물이 등록되었습니다.");
 
             } else if (func.equals("list")) {
+                System.out.println("===============================");
                 for (int i = 0; i < subject.size(); i++) {
-                    System.out.println(i+1 + "번 게시물의 내용은 다음과 같습니다.");
+                    System.out.println((i+1) + "번 게시물의 내용은 다음과 같습니다.");
+                    System.out.println("번호 : " + (i+1));
                     System.out.println("제목 : " + subject.get(i));
                     System.out.println("내용 : " + detail.get(i));
+                    System.out.println("===============================");
+                }
+            } else if (func.equals("update")) {
+
+                scan.nextLine(); // 버퍼 비우기
+
+                System.out.println("수정할 게시물 번호를 입력해주세요 : ");
+                String inputidx = scan.nextLine();
+                int postidx = Integer.parseInt(inputidx) - 1;
+
+                if (postidx < subject.size()) {
+
+                    System.out.println("수정할 제목을 입력해주세요 : ");
+                    String modifytitle = scan.nextLine();
+                    System.out.println("당신이 수정한 제목은 : " + modifytitle);
+
+                    System.out.println("수정할 내용을 입력해주세요 : ");
+                    String modifycontents = scan.nextLine();
+                    System.out.println("당신이 수정한 내용은 : " + modifycontents);
+
+                    subject.set(postidx, modifytitle);
+                    detail.set(postidx, modifycontents);
+
+                    System.out.println("게시물이 수정되었습니다.");
+                } else {
+                    System.out.println("없는 게시물 번호입니다.");
                 }
 
             } else if (func.equals("exit")) {
