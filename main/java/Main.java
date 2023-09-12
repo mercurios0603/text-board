@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ public class Main {
 
         Article article1 = new Article(1, "안녕하세요 반갑습니다", "질문이에요", "2023-08-31 14:01:23", "2023-08-31 14:05:463");
         Article article2 = new Article(2, "자바 질문좀 할게요~", "질문내용입니다", "2023-09-04 15:43:36", "2023-09-04 15:47:55");
-        Article article3 = new Article(3, "정처기 따야되나요?", "스펙 질문입니다", "2023-09-11 09:23:05", "2023-09-11 09:30:25");
+        Article article3 = new Article(3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023-09-11 09:23:05", "2023-09-11 09:30:25");
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
@@ -213,6 +214,32 @@ public class Main {
                     articles.remove(article);
                     System.out.println("게시물이 삭제되었습니다.");
                 }
+
+            } else if (func.equals("search")) {
+
+                scan.nextLine();
+
+                System.out.print("검색 키워드를 입력해주세요 : ");
+                String keyword = scan.nextLine();
+
+                for (int i = 0; i < articles.size(); i++) {
+                    if (articles.get(i).getTitle().contains(keyword)) {
+                        System.out.println("번호 : " + articles.get(i).getId());
+                        System.out.println("제목 : " + articles.get(i).getTitle());
+                        System.out.println("---------------------");
+                    } else {
+                        System.out.println("관련 키워드가 없습니다.");
+                    }
+                }
+
+
+//                    if (article == null) {
+//                        System.out.println("검색 결과가 없습니다.");
+//                    } else {
+//                        System.out.println("번호 : " + article.getId());
+//                        System.out.println("제목: " + article.getTitle());
+//                        System.out.println("---------------------");
+//                    }
 
             } else if (func.equals("exit")) {
                 System.out.println("프로그램을 종료합니다.");
