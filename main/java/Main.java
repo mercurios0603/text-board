@@ -1,7 +1,11 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
+    static ArrayList<Article> articles = new ArrayList<>();
+
     public static void main(String[] args) {
 
         // 이름 짓는 규칙
@@ -21,11 +25,14 @@ public class Main {
 //        ArrayList<Object> subject = new ArrayList<>();
 //        ArrayList<Object> detail = new ArrayList<>();
 
-        // 기사글에 들어가던 변수들을 Article 클래스에 통합
+        Article article1 = new Article(1, "안녕하세요 반갑습니다", "질문이에요", "2023-08-31 14:01:23", "2023-08-31 14:05:463");
+        Article article2 = new Article(2, "자바 질문좀 할게요~", "질문내용입니다", "2023-09-04 15:43:36", "2023-09-04 15:47:55");
+        Article article3 = new Article(3, "정처기 따야되나요?", "스펙 질문입니다", "2023-09-11 09:23:05", "2023-09-11 09:30:25");
+        articles.add(article1);
+        articles.add(article2);
+        articles.add(article3);
 
-        ArrayList<Article> articles = new ArrayList<>();
-
-        int listnumber = 0; // 글작성 번호는 프로그램이 살아있는 한 계속해서 증가되어야 한다.
+        int listid = articles.size(); // 글작성 번호는 프로그램이 살아있는 한 계속해서 증가되어야 한다.
 
         while (true) { // 무한 반복문
             System.out.print("메뉴 입력 : ");
@@ -35,9 +42,9 @@ public class Main {
             if (func.equals("add")) {
 
                 // 글번호를 별도로 입력받지 않지만 자동으로 입력됨.
-                // 글을 작성할 (add) 때마다 listnumber 값을 1 증가.
+                // 글을 작성할 (add) 때마다 listid 값을 1씩 증가.
 
-                listnumber++;
+                listid++;
 
                 System.out.println("게시물을 작성합니다.\n");
 
@@ -51,6 +58,11 @@ public class Main {
                 String contents = scan.nextLine();
                 System.out.println("당신이 입력한 내용은 : " + contents);
 
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String createtime = now.format(formatter);
+                System.out.println("작성 날짜 : " + createtime);
+
                 // articles와 article은 다른 것입니다.
 
                 // articles는 ArrayList 타입의 컬렉션입니다.
@@ -63,15 +75,14 @@ public class Main {
                 // 즉, articles는 여러 개의 Article 객체를 담을 수 있는 컬렉션(리스트)이고,
                 // article은 그 중 하나의 Article 객체입니다.
 
-                Article article = new Article(listnumber, title, contents);
+                Article article = new Article(listid, title, contents, createtime, createtime);
                 articles.add(article);
 
-
-//                number.add(listnumber); // 현재의 listnumber 값을 number 배열에 저장
+//                number.add(listid); // 현재의 listnumber 값을 number 배열에 저장
 //                subject.add(title); // 입력한 제목을 subject 배열에 저장
 //                detail.add(contents); // 입력한 내용을 detail 배열에 저장
 
-                System.out.println(listnumber + "번 게시물이 등록되었습니다.");
+                System.out.println(listid + "번 게시물이 등록되었습니다.");
 
             } else if (func.equals("list")) {
                 System.out.println("===============================");
@@ -79,9 +90,11 @@ public class Main {
 
                     Article article = articles.get(i);
 
-                    System.out.println(article.getNumber() + "번 게시물의 내용은 다음과 같습니다.");
-                    System.out.println("번호 : " + article.getNumber());
+                    System.out.println(article.getId() + "번 게시물의 내용은 다음과 같습니다.");
+                    System.out.println("번호 : " + article.getId());
                     System.out.println("제목 : " + article.getTitle());
+                    System.out.println("등록날짜 : " + article.getCreatetime());
+                    System.out.println("수정날짜 : " + article.getModifytime());
                     System.out.println("===============================");
                 }
             } else if (func.equals("update")) {
@@ -111,7 +124,7 @@ public class Main {
                 int index = -1;
 
                 for (int i = 0; i < articles.size(); i++) {
-                    if (articles.get(i).getNumber() == postidx) {
+                    if (articles.get(i).getId() == postidx) {
                         index = i; // postidx 값을 가지는 Article 객체를 찾으면 해당 인덱스 저장
                         break; // 찾았으면 루프 종료
                     }
@@ -123,6 +136,8 @@ public class Main {
 
                     scan.nextLine();
 
+                    Article article = articles.get(index);
+
                     System.out.print("수정할 제목을 입력해주세요 : ");
                     String modifytitle = scan.nextLine();
                     System.out.println("당신이 수정한 제목은 : " + modifytitle);
@@ -131,7 +146,11 @@ public class Main {
                     String modifycontents = scan.nextLine();
                     System.out.println("당신이 수정한 내용은 : " + modifycontents);
 
-                    Article newArticle = new Article(postidx, modifytitle, modifycontents);
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String modifytime = now.format(formatter);
+
+                    Article newArticle = new Article(postidx, modifytitle, modifycontents, article.getCreatetime(), modifytime);
                     articles.set(index, newArticle);
 
                     System.out.println("게시물이 수정되었습니다.");
@@ -149,107 +168,79 @@ public class Main {
 
                 System.out.print("상세보기 할 게시물 번호를 입력해주세요 : ");
 
-                int postidx2 = Integer.parseInt(scan.next());
+                int targetId = scan.nextInt();
+                Article article = findById(targetId);
 
-                int index2 = -1;
-
-                for (int i = 0; i < articles.size(); i++) {
-                    if (articles.get(i).getNumber() == postidx2) {
-                        index2 = i; // postidx 값을 가지는 Article 객체를 찾으면 해당 인덱스 저장
-                        break;
-                    }
-                }
-
-                if (index2 != -1) {
-                    Article article = articles.get(index2);
+                if (article == null) {
+                    System.out.println("없는 게시물 번호입니다.");
+                } else {
                     System.out.println("===============================");
-                    System.out.println(article.getNumber() + "번 게시물의 상세내용은 다음과 같습니다.");
-                    System.out.println("번호 : " + article.getNumber());
+                    System.out.println(article.getId() + "번 게시물의 상세내용은 다음과 같습니다.");
+                    System.out.println("번호 : " + article.getId());
                     System.out.println("제목 : " + article.getTitle());
                     System.out.println("내용 : " + article.getContent());
+                    System.out.println("등록날짜 : " + article.getCreatetime());
+                    System.out.println("수정날짜 : " + article.getModifytime());
                     System.out.println("===============================");
-
-                } else {
-                    System.out.println("없는 게시물 번호입니다.");
-
                 }
+
+//                int postidx2 = Integer.parseInt(scan.next());
+//
+//                int index2 = -1;
+//
+//                for (int i = 0; i < articles.size(); i++) {
+//                    if (articles.get(i).getId() == postidx2) {
+//                        index2 = i; // postidx 값을 가지는 Article 객체를 찾으면 해당 인덱스 저장
+//                        break;
+//                    }
+//                }
+
+//                if (index2 != -1) {
+//                    Article article = articles.get(index2);
 
             } else if (func.equals("delete")) {
 
-            // 버퍼 비우기. 해당 메서드가 실행된 이후의 Enter키로 입력이 종료되기 전의 모든 글자를 읽어옴.
-            scan.nextLine();
+                // 버퍼 비우기. 해당 메서드가 실행된 이후의 Enter키로 입력이 종료되기 전의 모든 글자를 읽어옴.
+                scan.nextLine();
+                System.out.print("삭제할 게시물 번호를 입력해주세요 : ");
 
-            System.out.print("삭제할 게시물 번호를 입력해주세요 : ");
+                int targetId = scan.nextInt();
+                Article article = findById(targetId);
 
-            String inputidx3 = scan.nextLine();
-            int postidx3 = Integer.parseInt(inputidx3);
-
-            int index3 = -1;
-
-            for (int i = 0; i < articles.size(); i++) {
-                if (articles.get(i).getNumber() == postidx3) {
-                    index3 = i; // postidx 값을 가지는 Article 객체를 찾으면 해당 인덱스 저장
-                    break; // 찾았으면 루프 종료
+                if (article == null) {
+                    System.out.println("없는 게시물 번호입니다.");
+                } else {
+                    articles.remove(article);
+                    System.out.println("게시물이 삭제되었습니다.");
                 }
+
+            } else if (func.equals("exit")) {
+                System.out.println("프로그램을 종료합니다.");
+                break;
             }
 
+            // 숫자 비교
+            // int a = 10;
+            // System.out.println(a == 10);
 
-            if (index3 != -1) {
+            // 문자열 비교
+            // String str = "hello";
+            // System.out.println(str.equals("hello"));
 
-                articles.remove(index3);
-
-                System.out.println("게시물이 삭제되었습니다.");
-
-            } else {
-                System.out.println("없는 게시물 번호입니다.");
-            }
-
-
-        } else if (func.equals("exit")) {
-            System.out.println("프로그램을 종료합니다.");
-            break;
         }
+    }
 
-        // 숫자 비교
-        // int a = 10;
-        // System.out.println(a == 10);
+    public static Article findById(int id) {
 
-        // 문자열 비교
-        // String str = "hello";
-        // System.out.println(str.equals("hello"));
+        Article target = null;
 
+        for (int i = 0; i < articles.size(); i++) {
+            Article article = articles.get(i);
+            if (id == article.getId()) {
+                target = article;
+            }
+        }
+        return target;
     }
 }
-}
 
-//class DataBase<T> {
-//
-//    private Object[] title;
-//    private Object[] contents;
-//
-//    int lastIdx;
-//
-//    DataBase() {
-//        title = new Object[3];
-//        contents = new Object[3];
-//        lastIdx = 0;
-//    }
-//
-//    public void setTitle(T title) {
-//        this.title[lastIdx] = title;
-//        lastIdx++;
-//    }
-//
-//    public void setContents(T contents) {
-//        this.contents[lastIdx] = contents;
-//                lastIdx++;
-//    }
-//
-//    public T getTitle(int idx) {
-//        return (T) title[idx];
-//    }
-//
-//    public T getContents(int idx) {
-//        return (T) contents[idx];
-//    }
-//}

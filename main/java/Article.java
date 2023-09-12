@@ -1,31 +1,37 @@
+import java.time.LocalDateTime;
+
 public class Article {
 
     // 클래스를 디자인 할 때는 변수부터 정하는 것이 좋다.
 
     // 글번호
-    private int number;
-
+    private int id;
     // 제목
     private String title;
     // 내용
     private String content;
 
-    // 작성자
     // 작성일
+    private String createtime;
+    // 수정일
+    private String modifytime;
+    // 작성자
     // 조회수
 
-    public Article(int number, String title, String content) {
-        this.number = number;
+    public Article(int id, String title, String content, String createtime, String modifytime) {
+        this.id = id;
         this.title = title;
         this.content = content;
+        this.createtime = createtime;
+        this.modifytime = modifytime;
     }
 
-    public int getNumber() {
-        return number;
+    public int getId() {
+        return id;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -42,5 +48,21 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(String createtime) {
+        this.createtime = createtime;
+    }
+
+    public String getModifytime() {
+        return modifytime;
+    }
+
+    public void setModifytime(String modifytime) {
+        this.modifytime = modifytime;
     }
 }
