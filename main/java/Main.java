@@ -1,10 +1,14 @@
-import java.util.List;
+import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Main {
+
+    //저장된 공간은 ArrayList의 동적배열을 따르는 Article(틀)이고, 그것을 컨트롤 하는 것이 articles(내용물)?
     static ArrayList<Article> articles = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -26,9 +30,9 @@ public class Main {
 //        ArrayList<Object> subject = new ArrayList<>();
 //        ArrayList<Object> detail = new ArrayList<>();
 
-        Article article1 = new Article(1, "안녕하세요 반갑습니다", "질문이에요", "2023-08-31 14:01:23", "2023-08-31 14:05:463");
-        Article article2 = new Article(2, "자바 질문좀 할게요~", "질문내용입니다", "2023-09-04 15:43:36", "2023-09-04 15:47:55");
-        Article article3 = new Article(3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023-09-11 09:23:05", "2023-09-11 09:30:25");
+        Article article1 = new Article(1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023-08-31 14:05:463");
+        Article article2 = new Article(2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023-09-04 15:47:55");
+        Article article3 = new Article(3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023-09-11 09:30:25");
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
@@ -59,8 +63,11 @@ public class Main {
                 String contents = scan.nextLine();
                 System.out.println("당신이 입력한 내용은 : " + contents);
 
-                LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+                ZonedDateTime now = LocalDateTime.now().atZone(seoulZone);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+
                 String createtime = now.format(formatter);
                 System.out.println("작성 날짜 : " + createtime);
 
@@ -147,8 +154,10 @@ public class Main {
                     String modifycontents = scan.nextLine();
                     System.out.println("당신이 수정한 내용은 : " + modifycontents);
 
-                    LocalDateTime now = LocalDateTime.now();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+                    ZonedDateTime now = LocalDateTime.now().atZone(seoulZone);
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
                     String modifytime = now.format(formatter);
 
                     Article newArticle = new Article(postidx, modifytitle, modifycontents, article.getCreatetime(), modifytime);
@@ -211,7 +220,8 @@ public class Main {
                 if (article == null) {
                     System.out.println("없는 게시물 번호입니다.");
                 } else {
-                    articles.remove(article);
+                    //articles.remove(i); 위치기반으로 삭제
+                    articles.remove(article); // 값 기반으로 삭제
                     System.out.println("게시물이 삭제되었습니다.");
                 }
 
@@ -222,24 +232,37 @@ public class Main {
                 System.out.print("검색 키워드를 입력해주세요 : ");
                 String keyword = scan.nextLine();
 
-                for (int i = 0; i < articles.size(); i++) {
-                    if (articles.get(i).getTitle().contains(keyword)) {
-                        System.out.println("번호 : " + articles.get(i).getId());
-                        System.out.println("제목 : " + articles.get(i).getTitle());
-                        System.out.println("---------------------");
-                    } else {
-                        System.out.println("관련 키워드가 없습니다.");
-                    }
-                }
+                // article이 일종의 리모컨
+                ArrayList<Article> searcharticle = searchByKeyword(keyword);
 
+                // 즉 함수가 실행되고 난 뒤 위의 코드구문은 아래와 같이 해석 가능하다.
+                // Article의 형태를 갖는 searcharticle에 배열에 조건에 맞는 searchKeyword 배열을 넣었다.
+                // 즉 Article의 틀을 갖는 객체 articles, searcharticle, searchKeyword는 모양이 같다.
 
-//                    if (article == null) {
-//                        System.out.println("검색 결과가 없습니다.");
-//                    } else {
-//                        System.out.println("번호 : " + article.getId());
-//                        System.out.println("제목: " + article.getTitle());
+//                for (int i = 0; i < articles.size(); i++) {
+//                    if (articles.get(i).getTitle().contains(keyword)) {
+//                        System.out.println("번호 : " + articles.get(i).getId());
+//                        System.out.println("제목 : " + articles.get(i).getTitle());
 //                        System.out.println("---------------------");
+//                    } else {
+//                        System.out.println("관련 키워드가 없습니다.");
 //                    }
+//                }
+
+                // 즉, 두 가지 방법이 있는 것이다. article의 초기값을 searchBykeyword에서 null 로 선언하면
+                // 첫번째 조건문이 article == null 이 될 것이고. 선언하지만 않으면 빈배열 []로 표기된다.
+                // 이를 만족시키려면 isEmpty() String 메소드를 사용할 수 있고 아래와 같이 작성 가능하다.
+
+                if (searcharticle.isEmpty()) {
+                        System.out.println("검색 결과가 없습니다.");
+                    } else {
+                        for (int i = 0; i < searcharticle.size(); i++) {
+                            Article result = searcharticle.get(i);
+                            System.out.println("번호: " + result.getId());
+                            System.out.println("제목: " + result.getTitle());
+                            System.out.println("---------------------");
+                        }
+                    }
 
             } else if (func.equals("exit")) {
                 System.out.println("프로그램을 종료합니다.");
@@ -268,6 +291,26 @@ public class Main {
             }
         }
         return target;
+    }
+
+    public static ArrayList<Article> searchByKeyword(String keyword) {
+
+        // 즉, ArrayList를 이용하여 Article 클래스의 모양을 갖는 리모컨 searchByKeyword를 하나 더 만든것이다.
+
+        ArrayList<Article> searchKeyword = new ArrayList<>();
+
+        // 기존의 게시물들이 저장된 articles를 순차적으로 검색하면서 제목에(getTitle()에)
+        // key가 포함된(contains(keyword)) 배열을 찾아 존재하면 (참(True)이면)
+        // 같은 구조를 갖는 searchByKeyword 배열에 조건문에서 찾아낸 배열을 넣어서 반환(return)하라는 뜻임.
+        // 즉 배열을 반환한 셈.
+
+        for (int i = 0; i < articles.size(); i++) {
+            Article article = articles.get(i);
+            if (article.getTitle().contains(keyword)) {
+                searchKeyword.add(article);
+            }
+        }
+        return searchKeyword;
     }
 }
 
