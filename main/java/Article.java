@@ -1,5 +1,3 @@
-import java.time.LocalDateTime;
-
 public class Article {
 
     // 클래스를 디자인 할 때는 변수부터 정하는 것이 좋다.
@@ -15,17 +13,20 @@ public class Article {
     private String createtime;
     // 수정일
     private String modifytime;
-    // 작성자
     // 조회수
+    private int count;
+    // 작성자
 
-    public Article(int id, String title, String content, String createtime, String modifytime) {
+    public Article(int id, String title, String content, String createtime, String modifytime, int count) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.createtime = createtime;
         this.modifytime = modifytime;
+        this.count = count;
     }
 
+    // 아래는 생성된 객체가 사용할 수 있는 메서드이다.
     public int getId() {
         return id;
     }
@@ -65,4 +66,13 @@ public class Article {
     public void setModifytime(String modifytime) {
         this.modifytime = modifytime;
     }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
 }
