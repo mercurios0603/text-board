@@ -1,6 +1,7 @@
 package Article.view;
 
 import Article.model.Article;
+import Article.model.Comment;
 
 import java.util.ArrayList;
 public class ArticleView {
@@ -32,5 +33,17 @@ public class ArticleView {
         System.out.println("수정날짜 : " + article.getModifytime());
         System.out.println("조회수 : " + article.getCount());
 
+    }
+
+    public void printCommentview (ArrayList<Comment> aaa) {
+
+        for (int i = 0; i < aaa.size(); i++) {
+
+            Comment bbb = aaa.get(i);
+
+            System.out.println("===============================");
+            System.out.println("댓글에 해당하는 글의 번호 : " + bbb.getCommentid());
+            System.out.println("댓글 : " + bbb.getReplyContent());
+        }
     }
 }

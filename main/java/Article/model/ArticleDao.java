@@ -1,23 +1,29 @@
 package Article.model;
-// 업계에서 "저장소"에 대해 많이 쓰이는 명칭 크게 두 가지
-// Dao 또는 Repository
+
 
 import Article.model.Article;
 import util.Util;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ArticleDao {
 
+    // 업계에서 "저장소"에 대해 많이 쓰이는 명칭 크게 두 가지
+    // Dao 또는 Repository
     //  말 그대로 저장소이기 때문에 Article 클래스의 형태를 갖는 변수명 articles의 ArrayList를 생성.
     ArrayList<Article> articles = new ArrayList<>();
+    ArrayList<Comment> comments = new ArrayList<>();
+
+    Scanner scan = new Scanner(System.in);
+
     int listid = 4; // articles.size();
 
     // 생성자 초기값.
     public ArticleDao() {
-        Article article1 = new Article(1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156);
-        Article article2 = new Article(2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350);
-        Article article3 = new Article(3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117);
+        Article article1 = new Article(1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156, null);
+        Article article2 = new Article(2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350, null);
+        Article article3 = new Article(3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117, null);
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
@@ -37,7 +43,7 @@ public class ArticleDao {
         // 즉, articles는 여러 개의 Article 객체를 담을 수 있는 컬렉션(리스트)이고,
         // article은 그 중 하나의 Article 객체입니다.
 
-        Article article = new Article(listid, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0);
+        Article article = new Article(listid, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0, null);
         articles.add(article);
         System.out.println(listid + "번 게시물이 등록되었습니다.");
 
@@ -75,6 +81,19 @@ public class ArticleDao {
         return target;
     }
 
+    public ArrayList<Comment> findcommentById(int postidx) {
+
+        ArrayList<Comment> aaa = new ArrayList<>();
+
+        for (int i = 0; i < comments.size(); i++) {
+            Comment bbb = comments.get(i);
+            if (postidx == bbb.getCommentid()) {
+                aaa.add(bbb);
+            }
+        }
+        return aaa;
+    }
+
     public ArrayList<Article> findByTitle(String keyword) {
 
         ArrayList<Article> searchKeyword = new ArrayList<>();
@@ -96,4 +115,36 @@ public class ArticleDao {
         return searchKeyword;
     }
 
+    public void DetailOption(int optionnumber, int listnumber) {
+
+        // 상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : 1
+
+        if (optionnumber == 1) {
+
+            System.out.print("댓글을 작성해주세요 : ");
+            String comment = scan.nextLine();
+
+            // 댓글을 입력받으면 계승한 해당글의 번호와 내용을... 클래스 Comment에 추가.
+            Comment test = new Comment(listnumber, comment);
+            comments.add(test);
+
+            System.out.println("댓글이 정상적으로 등록되었습니다.");
+
+        } else if (optionnumber == 2) {
+            System.out.println("[추천 기능]");
+        } else if (optionnumber == 3) {
+            System.out.println("[수정 기능]");
+        } else if (optionnumber == 4) {
+            System.out.println("[삭제 기능]");
+        } else if (optionnumber == 5) {
+            System.out.println("상세보기 화면을 빠져나갑니다.");
+        } else {
+            System.out.println("잘못된 입력입니다. 다시 입력하세요.");
+        }
+
+    }
+
+    public void addComment(String text) {
+
+    }
 }

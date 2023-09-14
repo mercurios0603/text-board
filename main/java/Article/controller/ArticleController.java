@@ -2,6 +2,7 @@ package Article.controller;
 
 import Article.model.Article;
 import Article.model.ArticleDao;
+import Article.model.Comment;
 import Article.view.ArticleView;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class ArticleController {
 
     ArticleView articleView = new ArticleView();
     ArticleDao articleDao = new ArticleDao();
+
     Scanner scan = new Scanner(System.in);
 
     public void add() {
@@ -69,6 +71,7 @@ public class ArticleController {
 
         int targetId = getParamInt(scan.nextLine(), -1);
         Article article = articleDao.findById(targetId);
+        ArrayList<Comment> test = articleDao.findcommentById(targetId);
 
         if (article == null) {
             System.out.println("없는 게시물 번호입니다.");
@@ -80,8 +83,11 @@ public class ArticleController {
 
             article.setCount(checkcount);
             articleView.printArticledetail(article);
+            articleView.printCommentview(test);
 
             System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : ");
+            int optionNumber = getParamInt(scan.nextLine(), -1);
+            articleDao.DetailOption(optionNumber, article.getId());
 
 //            int option = getParamInt(scan.nextLine(), -1);
 //            replyDao.DetailOption(option, article.getId());
@@ -132,7 +138,7 @@ public class ArticleController {
         System.out.print("검색 키워드를 입력해주세요 : ");
         String keyword = scan.nextLine();
 
-                ArrayList<Article> searcharticle = articleDao.findByTitle(keyword);
+        ArrayList<Article> searcharticle = articleDao.findByTitle(keyword);
 
         // 즉 함수가 실행되고 난 뒤 위의 코드구문은 아래와 같이 해석 가능하다.
         // Article의 형태를 갖는 searcharticle에 배열에 조건에 맞는 searchKeyword 배열을 넣었다.
