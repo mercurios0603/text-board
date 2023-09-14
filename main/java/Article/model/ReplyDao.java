@@ -1,4 +1,6 @@
-public class ReplyDB {
+package Article.model;
+
+public class ReplyDao {
 
 
     // 댓글 DB에는 고유 id (작성자 id 또는 글번호 id)에 따른 여러가지 댓글이 순차적으로 저장될 것.
@@ -18,13 +20,14 @@ public class ReplyDB {
     private String replytime;
     // 댓글 작성시간
 
-    public ReplyDB(int articleid, String reply, String replytime) {
+    public ReplyDao(int articleid, String reply, String replytime) {
         this.articleid = articleid;
         this.reply = reply;
         this.replytime = replytime;
     }
 
     public int setArticleid() {
+
         return articleid;
     }
 

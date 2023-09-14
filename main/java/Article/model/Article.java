@@ -1,3 +1,5 @@
+package Article.model;
+
 public class Article {
 
     // 클래스를 디자인 할 때는 변수부터 정하는 것이 좋다.
