@@ -14,6 +14,7 @@ public class ArticleView {
             Article article = list.get(i);
 
             System.out.println(article.getId() + "번 게시물의 내용은 다음과 같습니다.");
+            System.out.println("작성자 : " + article.getMemberId());
             System.out.println("번호 : " + article.getId());
             System.out.println("제목 : " + article.getTitle());
             System.out.println("등록날짜 : " + article.getCreatetime());

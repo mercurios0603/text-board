@@ -1,10 +1,6 @@
 package Article.controller;
 
-import Article.model.Article;
-import Article.model.ArticleDao;
-import Article.model.Comment;
-import Article.model.Member;
-import Article.model.MemberDao;
+import Article.model.*;
 import Article.view.ArticleView;
 
 import java.util.ArrayList;
@@ -18,20 +14,58 @@ public class ArticleController {
 
     MemberDao memberDao = new MemberDao();
 
+    ArrayList<Session> sessions = new ArrayList<>();
+
     Scanner scan = new Scanner(System.in);
+
+    public void signup() {
+
+        System.out.println("==== 회원 가입을 진행합니다. ====");
+        System.out.print("아이디를 입력해주세요 : ");
+        String inputId = scan.nextLine();
+        System.out.print("비밀번호를 입력해주세요 : ");
+        String inputPass = scan.nextLine();
+        System.out.print("닉네임을 입력해주세요 : ");
+        String inputNick = scan.nextLine();
+
+        memberDao.signup(inputId, inputPass, inputNick);
+
+        System.out.println("==== 회원가입이 완료되었습니다. ====");
+    }
+
+    public void signin() {
+        System.out.println("==== 로그인을 진행합니다. ====");
+        System.out.print("아이디 : ");
+        String loginId = scan.nextLine();
+        System.out.print("비밀번호 : ");
+        String loginPass = scan.nextLine();
+
+        memberDao.signin(loginId, loginPass);
+
+    }
 
     public void add() {
 
-        System.out.print("게시물 제목을 입력해주세요 : ");
-        String title = scan.nextLine();
-        System.out.println("당신이 입력한 제목은 : " + title);
+        System.out.println(sessions.get(0).getSessionId());
+        System.out.println(sessions.get(0).getSessionNickname());
 
-        System.out.print("게시물 내용을 입력해주세요 : ");
-        String contents = scan.nextLine();
-        System.out.println("당신이 입력한 내용은 : " + contents);
+        String abc = null;
 
-        articleDao.insert(title, contents);
+        if (abc == null ) {
+            System.out.println("게시물은 회원만 작성할 수 있습니다.");
+        } else {
 
+            System.out.print("게시물 제목을 입력해주세요 : ");
+            String title = scan.nextLine();
+            System.out.println("당신이 입력한 제목은 : " + title);
+
+            System.out.print("게시물 내용을 입력해주세요 : ");
+            String contents = scan.nextLine();
+            System.out.println("당신이 입력한 내용은 : " + contents);
+
+            articleDao.insert("임시", title, contents);
+
+        }
     }
 
     public void list() {
@@ -52,6 +86,8 @@ public class ArticleController {
              if (article == null) {
                  System.out.println("없는 게시물입니다.");
              } else {
+
+
                  System.out.print("제목 : ");
                  String newTitle = scan.nextLine();
                  System.out.print("내용 : ");
@@ -176,31 +212,7 @@ public class ArticleController {
 
     }
 
-    public void signup() {
 
-        System.out.println("==== 회원 가입을 진행합니다. ====");
-        System.out.print("아이디를 입력해주세요 : ");
-        String inputId = scan.nextLine();
-        System.out.print("비밀번호를 입력해주세요 : ");
-        String inputPass = scan.nextLine();
-        System.out.print("닉네임을 입력해주세요 : ");
-        String inputNick = scan.nextLine();
-
-        memberDao.signup(inputId, inputPass, inputNick);
-
-        System.out.println("==== 회원가입이 완료되었습니다. ====");
-    }
-
-    public void signin() {
-        System.out.println("==== 로그인을 진행합니다. ====");
-        System.out.print("아이디 : ");
-        String loginId = scan.nextLine();
-        System.out.print("비밀번호 : ");
-        String loginPass = scan.nextLine();
-
-        memberDao.signin(loginId, loginPass);
-
-    }
 
     public int getParamInt(String input, int defaultvalue) {
 

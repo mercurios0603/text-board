@@ -15,21 +15,22 @@ public class ArticleDao {
     ArrayList<Article> articles = new ArrayList<>();
     ArrayList<Comment> comments = new ArrayList<>();
 
+
     Scanner scan = new Scanner(System.in);
 
     int listid = 4; // articles.size();
 
     // 생성자 초기값.
     public ArticleDao() {
-        Article article1 = new Article(1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156, null);
-        Article article2 = new Article(2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350, null);
-        Article article3 = new Article(3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117, null);
+        Article article1 = new Article("홍길동", 1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156, null);
+        Article article2 = new Article("김유신", 2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350, null);
+        Article article3 = new Article("강감찬", 3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117, null);
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
     }
 
-    public void insert(String title, String contents) {
+    public void insert(String sessionname, String title, String contents) {
 
         // articles와 article은 다른 것입니다.
 
@@ -43,17 +44,16 @@ public class ArticleDao {
         // 즉, articles는 여러 개의 Article 객체를 담을 수 있는 컬렉션(리스트)이고,
         // article은 그 중 하나의 Article 객체입니다.
 
-        Article article = new Article(listid, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0, null);
+        Article article = new Article(sessionname, listid, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0, null);
         articles.add(article);
         System.out.println(listid + "번 게시물이 등록되었습니다.");
 
-        // 글을 작성할 (add) 때마다 listid 값을 1씩 증가.
+                // 글을 작성할 (add) 때마다 listid 값을 1씩 증가.
         listid++;
 
         // 게시물 기능의 일부 -> 비지니스 로직, 서비스 로직 (키워드만 기억해 둘 것)
         // 예를 들어. 조회수가 증가하는 것.
         // 이것들은 데이터를 다루는 클래스에 포함시키지 않는 것이 일반적이다.
-
     }
 
     public void delete(Article article) {

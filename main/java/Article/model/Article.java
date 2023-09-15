@@ -6,6 +6,8 @@ public class Article {
 
     // 클래스를 디자인 할 때는 변수부터 정하는 것이 좋다.
 
+    // 작성자
+    private String memberid;
     // 글번호
     private int id;
     // 제목
@@ -23,9 +25,8 @@ public class Article {
     // 댓글
     private ArrayList<Comment> comments;
 
-    // 작성자
-
-    public Article(int id, String title, String content, String createtime, String modifytime, int count, ArrayList<Comment> comments) {
+    public Article(String memberid, int id, String title, String content, String createtime, String modifytime, int count, ArrayList<Comment> comments) {
+        this.memberid = memberid;
         this.id = id;
         this.title = title;
         this.content = content;
@@ -36,6 +37,14 @@ public class Article {
     }
 
     // 아래는 생성된 객체가 사용할 수 있는 메서드이다.
+    public String getMemberId() {
+        return memberid;
+    }
+
+    public void setMemberId(String memberid) {
+        this.memberid = memberid;
+    }
+
     public int getId() {
         return id;
     }
