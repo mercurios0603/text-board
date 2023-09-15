@@ -55,6 +55,14 @@ public class BoardApp {
 
                 articleController.search();
 
+            } else if (func.equals("signup")) {
+
+                articleController.signup();
+
+            } else if (func.equals("signin")) {
+
+                articleController.signin();
+
             } else if (func.equals("exit")) {
                 System.out.println("프로그램을 종료합니다.");
                 break;
