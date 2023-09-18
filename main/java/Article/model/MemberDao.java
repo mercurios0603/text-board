@@ -16,22 +16,24 @@ public class MemberDao {
 
     }
 
-    public void signin(String loginid, String loginpass) {
+    public Session signin(String loginid, String loginpass) {
+
+        Session test2 = null;
 
         for (int i = 0; i < members.size(); i++) {
             Member test = members.get(i);
             if (loginid.equals(test.getMemberId()) && loginpass.equals(test.getMemberPassword())) {
                 System.out.println(test.getMemberNickname() + "님 환영합니다.");
-                Session ddd = new Session(test.getMemberId(), test.getMemberNickname());
-                sessions.add(ddd);
+                test2 = new Session(test.getMemberId(), test.getMemberNickname());
+                sessions.add(test2);
             } else {
                 System.out.println("아이디 또는 패스워드가 잘못되었습니다.");
             }
         }
-
+        return test2; // 성공한 경우 세션을 반환, 실패한 경우 null 반환
     }
 
-    public void sessions() {
-
+    public ArrayList<Session> getSessions() {
+        return sessions;
     }
 }

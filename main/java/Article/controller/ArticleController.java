@@ -2,6 +2,7 @@ package Article.controller;
 
 import Article.model.*;
 import Article.view.ArticleView;
+import Article.model.Session;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -13,8 +14,6 @@ public class ArticleController {
     ArticleDao articleDao = new ArticleDao();
 
     MemberDao memberDao = new MemberDao();
-
-    ArrayList<Session> sessions = new ArrayList<>();
 
     Scanner scan = new Scanner(System.in);
 
@@ -46,15 +45,14 @@ public class ArticleController {
 
     public void add() {
 
-        System.out.println(sessions.get(0).getSessionId());
-        System.out.println(sessions.get(0).getSessionNickname());
+        // 세션을 가져오는 작업이 필요함.
+        ArrayList<Session> sessions = memberDao.getSessions();
 
-        String abc = null;
+        // sessions 배열을 사용하여 필요한 작업 수행
 
-        if (abc == null ) {
+        if (sessions.isEmpty()) {
             System.out.println("게시물은 회원만 작성할 수 있습니다.");
         } else {
-
             System.out.print("게시물 제목을 입력해주세요 : ");
             String title = scan.nextLine();
             System.out.println("당신이 입력한 제목은 : " + title);
@@ -63,8 +61,7 @@ public class ArticleController {
             String contents = scan.nextLine();
             System.out.println("당신이 입력한 내용은 : " + contents);
 
-            articleDao.insert("임시", title, contents);
-
+            articleDao.insert(sessions.get(0).getSessionId(), title, contents);
         }
     }
 

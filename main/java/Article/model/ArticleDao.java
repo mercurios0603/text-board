@@ -143,8 +143,4 @@ public class ArticleDao {
         }
 
     }
-
-    public void addComment(String text) {
-
-    }
 }
