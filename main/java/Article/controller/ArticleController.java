@@ -2,7 +2,6 @@ package Article.controller;
 
 import Article.model.*;
 import Article.view.ArticleView;
-import Article.model.Session;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -15,42 +14,22 @@ public class ArticleController {
 
     MemberDao memberDao = new MemberDao();
 
+    CommentDao commentDao = new CommentDao();
+
     Scanner scan = new Scanner(System.in);
-
-    public void signup() {
-
-        System.out.println("==== 회원 가입을 진행합니다. ====");
-        System.out.print("아이디를 입력해주세요 : ");
-        String inputId = scan.nextLine();
-        System.out.print("비밀번호를 입력해주세요 : ");
-        String inputPass = scan.nextLine();
-        System.out.print("닉네임을 입력해주세요 : ");
-        String inputNick = scan.nextLine();
-
-        memberDao.signup(inputId, inputPass, inputNick);
-
-        System.out.println("==== 회원가입이 완료되었습니다. ====");
-    }
-
-    public void signin() {
-        System.out.println("==== 로그인을 진행합니다. ====");
-        System.out.print("아이디 : ");
-        String loginId = scan.nextLine();
-        System.out.print("비밀번호 : ");
-        String loginPass = scan.nextLine();
-
-        memberDao.signin(loginId, loginPass);
-
-    }
 
     public void add() {
 
         // 세션을 가져오는 작업이 필요함.
-        ArrayList<Session> sessions = memberDao.getSessions();
+        // String sessions = memberDao.getSessions();
 
         // sessions 배열을 사용하여 필요한 작업 수행
+        // 클래스를 어떻게 연결하느냐에 따라서 변수 라이프사이클 주기와 연결방식이 달라짐
+        // Member sessions = memberDao.getSessions();
 
-        if (sessions.isEmpty()) {
+        String sessions = null;
+
+        if (sessions == null) {
             System.out.println("게시물은 회원만 작성할 수 있습니다.");
         } else {
             System.out.print("게시물 제목을 입력해주세요 : ");
@@ -61,7 +40,7 @@ public class ArticleController {
             String contents = scan.nextLine();
             System.out.println("당신이 입력한 내용은 : " + contents);
 
-            articleDao.insert(sessions.get(0).getSessionId(), title, contents);
+            articleDao.insert(sessions, title, contents);
         }
     }
 
@@ -169,8 +148,6 @@ public class ArticleController {
     }
 
     public void search() {
-
-        scan.nextLine();
 
         System.out.print("검색 키워드를 입력해주세요 : ");
         String keyword = scan.nextLine();

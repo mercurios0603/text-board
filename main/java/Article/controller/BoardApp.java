@@ -6,6 +6,8 @@ public class BoardApp {
 
     ArticleController articleController = new ArticleController();
 
+    MemberController memberController = new MemberController();
+
     public void start() {
 
         // 일반적으로 핵심 로직을 Main에 작성하지 않는다.
@@ -57,11 +59,11 @@ public class BoardApp {
 
             } else if (func.equals("signup")) {
 
-                articleController.signup();
+                memberController.signup();
 
             } else if (func.equals("signin")) {
 
-                articleController.signin();
+                memberController.signin();
 
             } else if (func.equals("exit")) {
                 System.out.println("프로그램을 종료합니다.");
