@@ -11,7 +11,7 @@ public class MemberController {
 
     Scanner scan = new Scanner(System.in);
 
-    Member sessions = null;
+    Member sessioninfo = null;
 
     public void signup() {
 
@@ -28,14 +28,19 @@ public class MemberController {
         System.out.println("==== 회원가입이 완료되었습니다. ====");
     }
 
-    public void signin() {
+    public Member login() {
         System.out.println("==== 로그인을 진행합니다. ====");
         System.out.print("아이디 : ");
         String loginId = scan.nextLine();
         System.out.print("비밀번호 : ");
         String loginPass = scan.nextLine();
 
-        sessions = memberDao.signin(loginId, loginPass);
+        sessioninfo = memberDao.signin(loginId, loginPass);
 
+        return sessioninfo;
+    }
+
+    public Member loginedMember() {
+        return sessioninfo;
     }
 }

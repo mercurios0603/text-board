@@ -18,7 +18,7 @@ public class ArticleController {
 
     Scanner scan = new Scanner(System.in);
 
-    public void add() {
+    public void add(Member membersession) {
 
         // 세션을 가져오는 작업이 필요함.
         // String sessions = memberDao.getSessions();
@@ -27,9 +27,7 @@ public class ArticleController {
         // 클래스를 어떻게 연결하느냐에 따라서 변수 라이프사이클 주기와 연결방식이 달라짐
         // Member sessions = memberDao.getSessions();
 
-        String sessions = null;
-
-        if (sessions == null) {
+        if (membersession == null) {
             System.out.println("게시물은 회원만 작성할 수 있습니다.");
         } else {
             System.out.print("게시물 제목을 입력해주세요 : ");
@@ -40,7 +38,7 @@ public class ArticleController {
             String contents = scan.nextLine();
             System.out.println("당신이 입력한 내용은 : " + contents);
 
-            articleDao.insert(sessions, title, contents);
+            articleDao.insert(membersession.getMemberId(), title, contents);
         }
     }
 

@@ -1,5 +1,7 @@
 package Article.controller;
 
+import Article.model.Member;
+
 import java.util.Scanner;
 
 public class BoardApp {
@@ -30,12 +32,23 @@ public class BoardApp {
         Scanner scan = new Scanner(System.in);
 
         while (true) { // 무한 반복문
-            System.out.print("메뉴 입력 : ");
+
+            // 로그인이 끝난 이후에 반복문이 계속되고, 로그인 정보가 존재할경우
+            // 회원에게 제공되는 정보는 로그인 정보를 input 받아 콘트롤러에서 활용한다.
+
+            Member loginedmember = memberController.loginedMember();
+
+            if (loginedmember == null) {
+                System.out.print("명령어: ");
+            } else {
+                System.out.printf("명령어[%s(%s)]: ", loginedmember.getMemberId(), loginedmember.getMemberNickname());
+            }
+
             String func = scan.next();
 
             if (func.equals("add")) {
 
-                articleController.add();
+                articleController.add(loginedmember);
 
             } else if (func.equals("list")) {
 
@@ -63,7 +76,7 @@ public class BoardApp {
 
             } else if (func.equals("signin")) {
 
-                memberController.signin();
+                memberController.login();
 
             } else if (func.equals("exit")) {
                 System.out.println("프로그램을 종료합니다.");

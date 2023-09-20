@@ -17,6 +17,7 @@ public class MemberDao {
 
     public Member signin(String loginid, String loginpass) {
 
+        // 성공한 경우 세션을 반환, 실패한 경우 null 반환
 
         for (int i = 0; i < members.size(); i++) {
             Member sessions = members.get(i);
@@ -26,9 +27,6 @@ public class MemberDao {
             }
         }
         System.out.println("아이디 또는 패스워드가 잘못되었습니다.");
-        return null;  // 성공한 경우 세션을 반환, 실패한 경우 null 반환
-    }
-
-    public void getSessions() {
+        return null;
     }
 }
