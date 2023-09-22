@@ -1,7 +1,9 @@
 package Article.model;
 
 
+import Article.controller.ArticleController;
 import Article.model.Article;
+import Article.view.ArticleView;
 import util.Util;
 
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ public class ArticleDao {
     //  말 그대로 저장소이기 때문에 Article 클래스의 형태를 갖는 변수명 articles의 ArrayList를 생성.
     ArrayList<Article> articles = new ArrayList<>();
     ArrayList<Comment> comments = new ArrayList<>();
+
+    ArticleView articleView = new ArticleView();
 
 
     Scanner scan = new Scanner(System.in);
@@ -48,17 +52,12 @@ public class ArticleDao {
         articles.add(article);
         System.out.println(listid + "번 게시물이 등록되었습니다.");
 
-                // 글을 작성할 (add) 때마다 listid 값을 1씩 증가.
+        // 글을 작성할 (add) 때마다 listid 값을 1씩 증가.
         listid++;
 
         // 게시물 기능의 일부 -> 비지니스 로직, 서비스 로직 (키워드만 기억해 둘 것)
         // 예를 들어. 조회수가 증가하는 것.
         // 이것들은 데이터를 다루는 클래스에 포함시키지 않는 것이 일반적이다.
-    }
-
-    public void delete(Article article) {
-        //articles.remove(i); // 위치 기반으로 삭제
-        articles.remove(article);
     }
 
     public ArrayList<Article> findAllArticles() {
@@ -115,12 +114,11 @@ public class ArticleDao {
         return searchKeyword;
     }
 
-    public void DetailOption(int optionnumber, int listnumber) {
+    public void DetailOption(Member memberssesion, int optionnumber, int listnumber) {
 
         // 상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : 1
 
         if (optionnumber == 1) {
-
             System.out.print("댓글을 작성해주세요 : ");
             String comment = scan.nextLine();
 
@@ -133,9 +131,69 @@ public class ArticleDao {
         } else if (optionnumber == 2) {
             System.out.println("[추천 기능]");
         } else if (optionnumber == 3) {
-            System.out.println("[수정 기능]");
+
+            if (memberssesion == null) {
+
+                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
+
+            } else {
+
+                    Article findarticle = findById(listnumber);
+
+                if (findarticle.getMemberId() == memberssesion.getMemberId()) {
+
+                    Article target = findarticle;
+
+                    System.out.print("수정할 제목 입력 : ");
+                    String modifytitle = scan.nextLine();
+                    System.out.print("수정할 내용 입력 : ");
+                    String modifycontent = scan.nextLine();
+
+                    target.setTitle(modifytitle);
+                    target.setContent(modifycontent);
+
+                    System.out.println("수정이 완료되었습니다.");
+
+                    articleView.printArticledetail(target);
+
+                } else {
+                    System.out.println("자신의 게시물만 수정할 수 있습니다.");
+                }
+            }
+
+
         } else if (optionnumber == 4) {
-            System.out.println("[삭제 기능]");
+
+            if (memberssesion == null) {
+
+                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
+
+            } else {
+
+                    Article findarticle = findById(listnumber);
+
+                if (findarticle.getMemberId() == memberssesion.getMemberId()) {
+
+                    Article target = findarticle;
+
+                    System.out.print("정말 게시물을 삭제하시겠습니까? (y/n) : ");
+                    String confirmdelete = scan.nextLine();
+
+                    if (confirmdelete.equals("y")) {
+                        articles.remove(target);
+                        System.out.println("삭제가 완료되었습니다.");
+
+                        articleView.printArticles(articles);
+
+                    } else if (confirmdelete.equals("n")) {
+                        System.out.println("메인 화면으로 돌아갑니다");
+                    }
+
+                } else {
+                    System.out.println("자신의 게시글만 삭제할 수 있습니다.");
+                }
+            }
+
         } else if (optionnumber == 5) {
             System.out.println("상세보기 화면을 빠져나갑니다.");
         } else {

@@ -7,6 +7,10 @@ public class MemberDao {
 
     ArrayList<Member> members = new ArrayList<>();
 
+    public MemberDao() {
+        Member master = new Member ("kyg", "1234", "k89");
+        members.add(master);
+    }
 
     public void signup(String userid, String userpass, String usernick) {
 

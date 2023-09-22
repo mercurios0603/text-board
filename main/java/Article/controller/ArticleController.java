@@ -49,43 +49,13 @@ public class ArticleController {
 
     }
 
-    public void update() {
-
-         try {
-             System.out.print("수정할 게시물 번호를 입력해주세요 : ");
-             int postidx = getParamInt(scan.nextLine(), -1);
-
-             Article article = articleDao.findById(postidx);
-
-             if (article == null) {
-                 System.out.println("없는 게시물입니다.");
-             } else {
-
-
-                 System.out.print("제목 : ");
-                 String newTitle = scan.nextLine();
-                 System.out.print("내용 : ");
-                 String newContent = scan.nextLine();
-
-                 article.setTitle(newTitle);
-                 article.setContent(newContent);
-
-                 System.out.println("수정이 완료되었습니다.");
-             }
-
-         } catch(NumberFormatException e) {
-             System.out.println("숫자만 입력해야 합니다.");
-         }
-
-    }
-
-    public void detail() {
+    public void detail(Member membersession) {
 
         System.out.print("상세보기 할 게시물 번호를 입력해주세요 : ");
 
         int targetId = getParamInt(scan.nextLine(), -1);
         Article article = articleDao.findById(targetId);
-        ArrayList<Comment> test = articleDao.findcommentById(targetId);
+        ArrayList<Comment> commentview = articleDao.findcommentById(targetId);
 
         if (article == null) {
             System.out.println("없는 게시물 번호입니다.");
@@ -97,11 +67,11 @@ public class ArticleController {
 
             article.setCount(checkcount);
             articleView.printArticledetail(article);
-            articleView.printCommentview(test);
+            articleView.printCommentview(commentview);
 
             System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : ");
             int optionNumber = getParamInt(scan.nextLine(), -1);
-            articleDao.DetailOption(optionNumber, article.getId());
+            articleDao.DetailOption(membersession, optionNumber, article.getId());
 
 //            int option = getParamInt(scan.nextLine(), -1);
 //            replyDao.DetailOption(option, article.getId());
@@ -126,23 +96,6 @@ public class ArticleController {
 //                if (index2 != -1) {
 //                    Article article = articles.get(index2);
 
-    }
-
-    public void delete() {
-
-        // 버퍼 비우기. 해당 메서드가 실행된 이후의 Enter키로 입력이 종료되기 전의 모든 글자를 읽어옴.
-
-        System.out.print("삭제할 게시물 번호를 입력해주세요 : ");
-        int targetId = getParamInt(scan.nextLine(), -1);
-
-        Article article = articleDao.findById(targetId);
-
-        if (article == null) {
-            System.out.println("없는 게시물 번호입니다.");
-        } else {
-            articleDao.delete(article);
-            System.out.println("게시물이 삭제되었습니다.");
-        }
     }
 
     public void search() {

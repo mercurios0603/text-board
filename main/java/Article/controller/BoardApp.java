@@ -54,17 +54,9 @@ public class BoardApp {
 
                 articleController.list();
 
-            } else if (func.equals("update")) {
-
-                articleController.update();
-
             } else if (func.equals("detail")) {
 
-                articleController.detail();
-
-            } else if (func.equals("delete")) {
-
-                articleController.delete();
+                articleController.detail(loginedmember);
 
             } else if (func.equals("search")) {
 
