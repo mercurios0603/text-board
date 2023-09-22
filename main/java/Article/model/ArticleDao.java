@@ -17,7 +17,11 @@ public class ArticleDao {
     ArrayList<Article> articles = new ArrayList<>();
     ArrayList<Comment> comments = new ArrayList<>();
 
+    ArrayList<Like> likes = new ArrayList<>();
+
     ArticleView articleView = new ArticleView();
+
+    LikeDao likeDao = new LikeDao();
 
 
     Scanner scan = new Scanner(System.in);
@@ -119,17 +123,50 @@ public class ArticleDao {
         // 상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : 1
 
         if (optionnumber == 1) {
-            System.out.print("댓글을 작성해주세요 : ");
-            String comment = scan.nextLine();
 
-            // 댓글을 입력받으면 계승한 해당글의 번호와 내용을... 클래스 Comment에 추가.
-            Comment test = new Comment(listnumber, comment);
-            comments.add(test);
+            if (memberssesion == null) {
 
-            System.out.println("댓글이 정상적으로 등록되었습니다.");
+                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
 
+            } else {
+                System.out.print("댓글을 작성해주세요 : ");
+                String comment = scan.nextLine();
+
+                // 댓글을 입력받으면 계승한 해당글의 번호와 작성자와 내용을... 클래스 Comment에 추가.
+                Comment test = new Comment(listnumber, memberssesion.getMemberId(), comment);
+                comments.add(test);
+
+                System.out.println("댓글이 정상적으로 등록되었습니다.");
+
+            }
         } else if (optionnumber == 2) {
-            System.out.println("[추천 기능]");
+
+            if (memberssesion == null) {
+
+                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
+
+            } else {
+
+                //게시글 번호에 해당하는 기사 찾아오기 (정확한 기사 배열을 가져온 상태?)
+                Article findarticle = findById(listnumber);
+
+                //게시글 번호에 해당하는 좋아요 찾아오기 (정확한 좋아요 배열을 가져온 상태?)
+                Like findlike = likeDao.findlikeById(listnumber);
+
+                int dummy = 0;
+
+                if (findlike.getLikeChoose() == 0) {
+                    dummy = findlike.getLikeChoose() + 1;
+                } else {
+                    dummy = findlike.getLikeChoose() - 1;
+                }
+
+                Like test = new Like(findarticle.getId(), memberssesion.getMemberId(), dummy);
+                likes.add(test);
+                System.out.print(likes);
+
+            }
+
         } else if (optionnumber == 3) {
 
             if (memberssesion == null) {
@@ -138,7 +175,7 @@ public class ArticleDao {
 
             } else {
 
-                    Article findarticle = findById(listnumber);
+                Article findarticle = findById(listnumber);
 
                 if (findarticle.getMemberId() == memberssesion.getMemberId()) {
 
@@ -170,7 +207,7 @@ public class ArticleDao {
 
             } else {
 
-                    Article findarticle = findById(listnumber);
+                Article findarticle = findById(listnumber);
 
                 if (findarticle.getMemberId() == memberssesion.getMemberId()) {
 
@@ -180,6 +217,7 @@ public class ArticleDao {
                     String confirmdelete = scan.nextLine();
 
                     if (confirmdelete.equals("y")) {
+                        //articles.remove(i); // 위치 기반으로 삭제
                         articles.remove(target);
                         System.out.println("삭제가 완료되었습니다.");
 

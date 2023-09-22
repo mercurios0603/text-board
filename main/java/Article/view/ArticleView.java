@@ -33,6 +33,7 @@ public class ArticleView {
         System.out.println("등록날짜 : " + article.getCreatetime());
         System.out.println("수정날짜 : " + article.getModifytime());
         System.out.println("조회수 : " + article.getCount());
+        System.out.println("좋아요 : ");
 
     }
 
@@ -44,6 +45,7 @@ public class ArticleView {
 
             System.out.println("===============================");
             System.out.println("댓글에 해당하는 글의 번호 : " + bbb.getCommentid());
+            System.out.println("댓글 작성자 : " + bbb.getCommentUser());
             System.out.println("댓글 : " + bbb.getReplyContent());
         }
     }

@@ -12,9 +12,7 @@ public class ArticleController {
     ArticleView articleView = new ArticleView();
     ArticleDao articleDao = new ArticleDao();
 
-    MemberDao memberDao = new MemberDao();
-
-    CommentDao commentDao = new CommentDao();
+    LikeDao likeDao = new LikeDao();
 
     Scanner scan = new Scanner(System.in);
 
@@ -56,6 +54,7 @@ public class ArticleController {
         int targetId = getParamInt(scan.nextLine(), -1);
         Article article = articleDao.findById(targetId);
         ArrayList<Comment> commentview = articleDao.findcommentById(targetId);
+        // ArrayList<Like> likeview = likeDao.findlikeById(targetId);
 
         if (article == null) {
             System.out.println("없는 게시물 번호입니다.");
@@ -72,30 +71,7 @@ public class ArticleController {
             System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : ");
             int optionNumber = getParamInt(scan.nextLine(), -1);
             articleDao.DetailOption(membersession, optionNumber, article.getId());
-
-//            int option = getParamInt(scan.nextLine(), -1);
-//            replyDao.DetailOption(option, article.getId());
-//
-//            System.out.println("===============================");
-//            System.out.println("수정날짜 : ");
-//            System.out.println("조회수 : ");
-
         }
-
-//                int postidx2 = Integer.parseInt(scan.next());
-//
-//                int index2 = -1;
-//
-//                for (int i = 0; i < articles.size(); i++) {
-//                    if (articles.get(i).getId() == postidx2) {
-//                        index2 = i; // postidx 값을 가지는 Article 객체를 찾으면 해당 인덱스 저장
-//                        break;
-//                    }
-//                }
-
-//                if (index2 != -1) {
-//                    Article article = articles.get(index2);
-
     }
 
     public void search() {
