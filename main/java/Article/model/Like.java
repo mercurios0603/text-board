@@ -2,17 +2,14 @@ package Article.model;
 
 public class Like {
 
+
     private int articleid;
 
-    private String articleuser;
+    private String likeuser;
 
-    private int likechoose;
-
-
-    public Like(int articleId, String articleUser, int likechoose) {
+    public Like(int articleid, String likeuser) {
         this.articleid = articleid;
-        this.articleuser = articleuser;
-        this.likechoose = likechoose;
+        this.likeuser = likeuser;
     }
 
     public int getArticleId() {
@@ -23,20 +20,13 @@ public class Like {
         this.articleid = articleid;
     }
 
-    public String getArticleUser() {
-        return articleuser;
+    public String getLikeUser() {
+        return likeuser;
     }
 
-    public void setArticleUser(String articleuser) {
-        this.articleuser = articleuser;
+    public void setLikeUser(String likeuser) {
+        this.likeuser = likeuser;
     }
 
-    public int getLikeChoose() {
-        return likechoose;
-    }
-
-    public void setLikeChoose(int likechoose) {
-        this.likechoose = likechoose;
-    }
 
 }

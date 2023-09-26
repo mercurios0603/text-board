@@ -1,19 +1,29 @@
 package Article.model;
 public class Member {
 
+    private int memberindex;
+
     private String memberid;
 
     private String memberpassword;
 
     private String membernickname;
 
-    public Member(String memberid, String memberpassword, String membernickname) {
+    public Member(int memberindex, String memberid, String memberpassword, String membernickname) {
+        this.memberindex = memberindex;
         this.memberid = memberid;
         this.memberpassword = memberpassword;
         this.membernickname = membernickname;
 
     }
 
+    public int getMemberIndex () {
+        return memberindex;
+    }
+
+    public void setMemberIndex (int memberid) {
+        this.memberindex = memberindex;
+    }
     public String getMemberId () {
         return memberid;
     }

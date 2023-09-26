@@ -22,10 +22,7 @@ public class Article {
     // 조회수
     private int count;
 
-    // 댓글
-    private ArrayList<Comment> comments;
-
-    public Article(String memberid, int id, String title, String content, String createtime, String modifytime, int count, ArrayList<Comment> comments) {
+    public Article(String memberid, int id, String title, String content, String createtime, String modifytime, int count) {
         this.memberid = memberid;
         this.id = id;
         this.title = title;
@@ -33,7 +30,6 @@ public class Article {
         this.createtime = createtime;
         this.modifytime = modifytime;
         this.count = count;
-        this.comments = comments;
     }
 
     // 아래는 생성된 객체가 사용할 수 있는 메서드이다.
@@ -92,15 +88,4 @@ public class Article {
     public void setCount(int count) {
         this.count = count;
     }
-
-    public ArrayList<Comment> getComments() {
-
-        return comments;
-    }
-
-    public void setComments(ArrayList<Comment> comments) {
-
-        this.comments = comments;
-    }
-
 }

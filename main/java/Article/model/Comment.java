@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 public class Comment {
 
+    private int cid; // 댓글 PK id
+
     // 댓글이 작성된 글번호
-    private int cid;
+    private int articleid;
 
     // 댓글 작성자
     private String commentuser;
@@ -13,8 +15,9 @@ public class Comment {
     // 댓글 내용
     private String replycontent;
 
-    public Comment(int cid, String commentuser, String replycontent) {
+    public Comment(int cid, int articleid , String commentuser, String replycontent) {
         this.cid = cid;
+        this.articleid = articleid;
         this.commentuser = commentuser;
         this.replycontent = replycontent;
     }
@@ -26,6 +29,12 @@ public class Comment {
     public void setCommentid(int cid) {
         this.cid = cid;
     }
+
+    public int getArticleid() {
+        return articleid;
+    }
+
+    public void setArticleid(int articleid) {this.articleid = articleid; }
 
     public String getCommentUser() {
         return commentuser;

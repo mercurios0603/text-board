@@ -13,6 +13,8 @@ public class MemberController {
 
     Member sessioninfo = null;
 
+    int memberindex = 2; // 현재 kyg로 회원가입 되어 있으므로 2로 설정하였음
+
     public void signup() {
 
         System.out.println("==== 회원 가입을 진행합니다. ====");
@@ -23,7 +25,9 @@ public class MemberController {
         System.out.print("닉네임을 입력해주세요 : ");
         String inputNick = scan.nextLine();
 
-        memberDao.signup(inputId, inputPass, inputNick);
+        memberDao.signup(memberindex, inputId, inputPass, inputNick);
+
+        memberindex++;
 
         System.out.println("==== 회원가입이 완료되었습니다. ====");
     }

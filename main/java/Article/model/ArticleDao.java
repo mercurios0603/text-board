@@ -13,16 +13,14 @@ public class ArticleDao {
 
     // 업계에서 "저장소"에 대해 많이 쓰이는 명칭 크게 두 가지
     // Dao 또는 Repository
-    //  말 그대로 저장소이기 때문에 Article 클래스의 형태를 갖는 변수명 articles의 ArrayList를 생성.
+    // 말 그대로 저장소이기 때문에 Article 클래스의 형태를 갖는 변수명 articles의 ArrayList를 생성.
     ArrayList<Article> articles = new ArrayList<>();
-    ArrayList<Comment> comments = new ArrayList<>();
-
-    ArrayList<Like> likes = new ArrayList<>();
 
     ArticleView articleView = new ArticleView();
 
-    LikeDao likeDao = new LikeDao();
+    CommentDao commentDao = new CommentDao();
 
+    LikeDao likeDao = new LikeDao();
 
     Scanner scan = new Scanner(System.in);
 
@@ -30,9 +28,9 @@ public class ArticleDao {
 
     // 생성자 초기값.
     public ArticleDao() {
-        Article article1 = new Article("홍길동", 1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156, null);
-        Article article2 = new Article("김유신", 2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350, null);
-        Article article3 = new Article("강감찬", 3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117, null);
+        Article article1 = new Article("홍길동", 1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156);
+        Article article2 = new Article("김유신", 2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350);
+        Article article3 = new Article("강감찬", 3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117);
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
@@ -52,7 +50,7 @@ public class ArticleDao {
         // 즉, articles는 여러 개의 Article 객체를 담을 수 있는 컬렉션(리스트)이고,
         // article은 그 중 하나의 Article 객체입니다.
 
-        Article article = new Article(sessionname, listid, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0, null);
+        Article article = new Article(sessionname, listid, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0);
         articles.add(article);
         System.out.println(listid + "번 게시물이 등록되었습니다.");
 
@@ -84,18 +82,7 @@ public class ArticleDao {
         return target;
     }
 
-    public ArrayList<Comment> findcommentById(int postidx) {
 
-        ArrayList<Comment> aaa = new ArrayList<>();
-
-        for (int i = 0; i < comments.size(); i++) {
-            Comment bbb = comments.get(i);
-            if (postidx == bbb.getCommentid()) {
-                aaa.add(bbb);
-            }
-        }
-        return aaa;
-    }
 
     public ArrayList<Article> findByTitle(String keyword) {
 
@@ -118,125 +105,25 @@ public class ArticleDao {
         return searchKeyword;
     }
 
-    public void DetailOption(Member memberssesion, int optionnumber, int listnumber) {
+    public void likeprocess(Member membersession, Article article) {
 
-        // 상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : 1
+        // 시나리오를 고민해볼 것!!! (아래 시나리오는 likeprocess 비즈니스 로직에 반영되어야 함)
+        // 좋아요 버튼을 눌렀을 때
+        // (1) 먼저 회원고유식별번호(회원아이디)와 게시글 번호를 가지고 좋아요 DB를 검색을 함 (둘다 일치 AND, DAO에서 진행)
+        // (2) 없는 경우. 이 게시글에 대한 새로운 객체를 생성해서 좋아요 배열을 삽입함. (DAO에서 진행)
+        // (3) 있는 경우, 이 게시글에 대한 좋아요 배열을 제거함. (DAO에서 진행)
+        // DB에는 무조건 어떤 게시글에, 어떤 회원이, 좋아요를 누른것만 남음 (좋아요 0은 remove로 삭제됨)
+        // 배열 그자체가 좋아요인 것이다. 별도의 변수 설정은 필요없다. 좋아요의 갯수는 곧 배열의 개수이다.
 
-        if (optionnumber == 1) {
+        Like like = likeDao.getLikeByArticleIdAndMemberId(article.getId(), membersession.getMemberId());
 
-            if (memberssesion == null) {
-
-                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
-
-            } else {
-                System.out.print("댓글을 작성해주세요 : ");
-                String comment = scan.nextLine();
-
-                // 댓글을 입력받으면 계승한 해당글의 번호와 작성자와 내용을... 클래스 Comment에 추가.
-                Comment test = new Comment(listnumber, memberssesion.getMemberId(), comment);
-                comments.add(test);
-
-                System.out.println("댓글이 정상적으로 등록되었습니다.");
-
-            }
-        } else if (optionnumber == 2) {
-
-            if (memberssesion == null) {
-
-                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
-
-            } else {
-
-                //게시글 번호에 해당하는 기사 찾아오기 (정확한 기사 배열을 가져온 상태?)
-                Article findarticle = findById(listnumber);
-
-                //게시글 번호에 해당하는 좋아요 찾아오기 (정확한 좋아요 배열을 가져온 상태?)
-                Like findlike = likeDao.findlikeById(listnumber);
-
-                int dummy = 0;
-
-                if (findlike.getLikeChoose() == 0) {
-                    dummy = findlike.getLikeChoose() + 1;
-                } else {
-                    dummy = findlike.getLikeChoose() - 1;
-                }
-
-                Like test = new Like(findarticle.getId(), memberssesion.getMemberId(), dummy);
-                likes.add(test);
-                System.out.print(likes);
-
-            }
-
-        } else if (optionnumber == 3) {
-
-            if (memberssesion == null) {
-
-                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
-
-            } else {
-
-                Article findarticle = findById(listnumber);
-
-                if (findarticle.getMemberId() == memberssesion.getMemberId()) {
-
-                    Article target = findarticle;
-
-                    System.out.print("수정할 제목 입력 : ");
-                    String modifytitle = scan.nextLine();
-                    System.out.print("수정할 내용 입력 : ");
-                    String modifycontent = scan.nextLine();
-
-                    target.setTitle(modifytitle);
-                    target.setContent(modifycontent);
-
-                    System.out.println("수정이 완료되었습니다.");
-
-                    articleView.printArticledetail(target);
-
-                } else {
-                    System.out.println("자신의 게시물만 수정할 수 있습니다.");
-                }
-            }
-
-
-        } else if (optionnumber == 4) {
-
-            if (memberssesion == null) {
-
-                System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
-
-            } else {
-
-                Article findarticle = findById(listnumber);
-
-                if (findarticle.getMemberId() == memberssesion.getMemberId()) {
-
-                    Article target = findarticle;
-
-                    System.out.print("정말 게시물을 삭제하시겠습니까? (y/n) : ");
-                    String confirmdelete = scan.nextLine();
-
-                    if (confirmdelete.equals("y")) {
-                        //articles.remove(i); // 위치 기반으로 삭제
-                        articles.remove(target);
-                        System.out.println("삭제가 완료되었습니다.");
-
-                        articleView.printArticles(articles);
-
-                    } else if (confirmdelete.equals("n")) {
-                        System.out.println("메인 화면으로 돌아갑니다");
-                    }
-
-                } else {
-                    System.out.println("자신의 게시글만 삭제할 수 있습니다.");
-                }
-            }
-
-        } else if (optionnumber == 5) {
-            System.out.println("상세보기 화면을 빠져나갑니다.");
+        if(like == null) {
+            likeDao.insert(article.getId(), membersession.getMemberId());
+            System.out.println("해당 게시물을 좋아합니다.");
         } else {
-            System.out.println("잘못된 입력입니다. 다시 입력하세요.");
+            likeDao.delete(like);
+            System.out.println("해당 게시물의 좋아요를 해제합니다.");
         }
-
     }
+
 }
