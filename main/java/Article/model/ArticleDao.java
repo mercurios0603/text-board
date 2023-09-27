@@ -28,7 +28,7 @@ public class ArticleDao {
 
     // 생성자 초기값.
     public ArticleDao() {
-        Article article1 = new Article(1,"홍길동",  "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156);
+        Article article1 = new Article(1, "홍길동", "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156);
         Article article2 = new Article(2, "김유신", "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350);
         Article article3 = new Article(3, "강감찬", "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117);
         articles.add(article1);
@@ -62,6 +62,17 @@ public class ArticleDao {
         // 이것들은 데이터를 다루는 클래스에 포함시키지 않는 것이 일반적이다.
     }
 
+    public void delete(Article article, String confirmdelete) {
+
+        if (confirmdelete.equals("y")) {
+            articles.remove(article);
+            System.out.println("삭제가 완료되었습니다.");
+            articleView.printArticles(articles);
+        } else if (confirmdelete.equals("n")) {
+            System.out.println("메인 화면으로 돌아갑니다");
+        }
+    }
+
     public ArrayList<Article> findAllArticles() {
         return articles;
     }
@@ -80,7 +91,6 @@ public class ArticleDao {
 
         return target;
     }
-
 
 
     public ArrayList<Article> findByTitle(String keyword) {
@@ -102,27 +112,6 @@ public class ArticleDao {
         }
 
         return searchKeyword;
-    }
-
-    public void likeprocess(Member membersession, Article article) {
-
-        // 시나리오를 고민해볼 것!!! (아래 시나리오는 likeprocess 비즈니스 로직에 반영되어야 함)
-        // 좋아요 버튼을 눌렀을 때
-        // (1) 먼저 회원고유식별번호(회원아이디)와 게시글 번호를 가지고 좋아요 DB를 검색을 함 (둘다 일치 AND, DAO에서 진행)
-        // (2) 없는 경우. 이 게시글에 대한 새로운 객체를 생성해서 좋아요 배열을 삽입함. (DAO에서 진행)
-        // (3) 있는 경우, 이 게시글에 대한 좋아요 배열을 제거함. (DAO에서 진행)
-        // DB에는 무조건 어떤 게시글에, 어떤 회원이, 좋아요를 누른것만 남음 (좋아요 0은 remove로 삭제됨)
-        // 배열 그자체가 좋아요인 것이다. 별도의 변수 설정은 필요없다. 좋아요의 갯수는 곧 배열의 개수이다.
-
-        Like like = likeDao.getLikeByArticleIdAndMemberId(article.getArticleIndex(), membersession.getMemberId());
-
-        if(like == null) {
-            likeDao.insert(article.getArticleIndex(), membersession.getMemberId());
-            System.out.println("해당 게시물을 좋아합니다.");
-        } else {
-            likeDao.delete(like);
-            System.out.println("해당 게시물의 좋아요를 해제합니다.");
-        }
     }
 
 }

@@ -96,6 +96,7 @@ public class ArticleController {
             } else {
                 System.out.print("댓글을 작성해주세요 : ");
                 String inputcomment = scan.nextLine();
+                commentDao.insert(article.getArticleIndex(), member.getMemberNickname(),inputcomment);
 
                 System.out.println("댓글이 정상적으로 등록되었습니다.");
             }
@@ -148,17 +149,8 @@ public class ArticleController {
 
                     System.out.print("정말 게시물을 삭제하시겠습니까? (y/n) : ");
                     String confirmdelete = scan.nextLine();
-//
-//                    if (confirmdelete.equals("y")) {
-//                        //articles.remove(i); // 위치 기반으로 삭제
-//                        articles.remove(target);
-//                        System.out.println("삭제가 완료되었습니다.");
-//
-//                        articleView.printArticles(articles);
-//
-//                    } else if (confirmdelete.equals("n")) {
-//                        System.out.println("메인 화면으로 돌아갑니다");
-//                    }
+
+                    articleDao.delete(target, confirmdelete);
 
                 } else {
                     System.out.println("자신의 게시글만 삭제할 수 있습니다.");
@@ -177,6 +169,13 @@ public class ArticleController {
         // 하나의 게시물에 한명의 유저가 체크 가능 -> 어떤 게시물에 어떤 회원이 좋아요 체크 했는지 기억해야 한다.
         // 좋아요 -> 어떤 게시물, 어떤 회원, 언제
         // 좋아요 여러개 -> 1번 게시물에 1번 유저, 1번 게시물에 2번 유저, 1번 게시물에 3번 유저, 2번 게시물에 1번 유저 ....
+        // 시나리오를 고민해볼 것!!! (아래 시나리오는 likeprocess 비즈니스 로직에 반영되어야 함)
+        // 좋아요 버튼을 눌렀을 때
+        // (1) 먼저 회원고유식별번호(회원아이디)와 게시글 번호를 가지고 좋아요 DB를 검색을 함 (둘다 일치 AND, DAO에서 진행)
+        // (2) 없는 경우. 이 게시글에 대한 새로운 객체를 생성해서 좋아요 배열을 삽입함. (DAO에서 진행)
+        // (3) 있는 경우, 이 게시글에 대한 좋아요 배열을 제거함. (DAO에서 진행)
+        // DB에는 무조건 어떤 게시글에, 어떤 회원이, 좋아요를 누른것만 남음 (좋아요 0은 remove로 삭제됨)
+        // 배열 그자체가 좋아요인 것이다. 별도의 변수 설정은 필요없다. 좋아요의 갯수는 곧 배열의 개수이다.
 
         Like like = likeDao.getLikeByArticleIdAndMemberId(article.getArticleIndex(), member.getMemberId());
 

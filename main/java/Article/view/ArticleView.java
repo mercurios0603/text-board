@@ -21,7 +21,7 @@ public class ArticleView {
             System.out.println("제목 : " + article.getTitle());
             System.out.println("등록날짜 : " + article.getCreatetime());
             System.out.println("수정날짜 : " + article.getModifytime());
-            System.out.println("===============================");
+            System.out.println("==================");
         }
     }
     public void printArticleDetail(Article article, Member member, ArrayList<Comment> replies, int likeCount, Like like) {
@@ -45,11 +45,11 @@ public class ArticleView {
         for (int i = 0; i < aaa.size(); i++) {
 
             Comment bbb = aaa.get(i);
-
-            System.out.println("===============================");
-            System.out.println("댓글에 해당하는 글의 번호 : " + bbb.getCommentid());
+            System.out.println("댓글의 글번호 : " + bbb.getArticleid());
+            System.out.println("댓글 번호 : " + bbb.getCommentid());
             System.out.println("댓글 작성자 : " + bbb.getCommentUser());
             System.out.println("댓글 : " + bbb.getReplyContent());
+            System.out.println("==================");
         }
     }
 }
