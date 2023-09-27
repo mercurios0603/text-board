@@ -13,7 +13,7 @@ public class MemberController {
 
     Member sessioninfo = null;
 
-    int memberindex = 2; // 현재 kyg로 회원가입 되어 있으므로 2로 설정하였음
+    int memberindex = 3; // 현재 kyg로 본계정, 부계정 두명이 회원가입 되어 있으므로 3으로 설정하였음
 
     public void signup() {
 
@@ -27,6 +27,7 @@ public class MemberController {
 
         memberDao.signup(memberindex, inputId, inputPass, inputNick);
 
+        // 회원가입이 증가할수록 회원 인덱스 PK 증가.
         memberindex++;
 
         System.out.println("==== 회원가입이 완료되었습니다. ====");

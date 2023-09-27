@@ -28,9 +28,9 @@ public class ArticleDao {
 
     // 생성자 초기값.
     public ArticleDao() {
-        Article article1 = new Article("홍길동", 1, "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156);
-        Article article2 = new Article("김유신", 2, "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350);
-        Article article3 = new Article("강감찬", 3, "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117);
+        Article article1 = new Article(1,"홍길동",  "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156);
+        Article article2 = new Article(2, "김유신", "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350);
+        Article article3 = new Article(3, "강감찬", "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117);
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
@@ -50,7 +50,7 @@ public class ArticleDao {
         // 즉, articles는 여러 개의 Article 객체를 담을 수 있는 컬렉션(리스트)이고,
         // article은 그 중 하나의 Article 객체입니다.
 
-        Article article = new Article(sessionname, listid, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0);
+        Article article = new Article(listid, sessionname, title, contents, Util.getCurrentTime(), Util.getCurrentTime(), 0);
         articles.add(article);
         System.out.println(listid + "번 게시물이 등록되었습니다.");
 
@@ -66,7 +66,6 @@ public class ArticleDao {
         return articles;
     }
 
-
     // 입력한 번호에 해당하는 Article을 반환하는 메서드
     public Article findById(int postidx) {
 
@@ -74,7 +73,7 @@ public class ArticleDao {
 
         for (int i = 0; i < articles.size(); i++) {
             Article article = articles.get(i);
-            if (postidx == article.getId()) {
+            if (postidx == article.getArticleIndex()) {
                 target = article;
             }
         }
@@ -115,10 +114,10 @@ public class ArticleDao {
         // DB에는 무조건 어떤 게시글에, 어떤 회원이, 좋아요를 누른것만 남음 (좋아요 0은 remove로 삭제됨)
         // 배열 그자체가 좋아요인 것이다. 별도의 변수 설정은 필요없다. 좋아요의 갯수는 곧 배열의 개수이다.
 
-        Like like = likeDao.getLikeByArticleIdAndMemberId(article.getId(), membersession.getMemberId());
+        Like like = likeDao.getLikeByArticleIdAndMemberId(article.getArticleIndex(), membersession.getMemberId());
 
         if(like == null) {
-            likeDao.insert(article.getId(), membersession.getMemberId());
+            likeDao.insert(article.getArticleIndex(), membersession.getMemberId());
             System.out.println("해당 게시물을 좋아합니다.");
         } else {
             likeDao.delete(like);

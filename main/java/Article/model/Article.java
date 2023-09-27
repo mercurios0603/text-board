@@ -6,10 +6,10 @@ public class Article {
 
     // 클래스를 디자인 할 때는 변수부터 정하는 것이 좋다.
 
-    // 작성자
+    // PK
+    private int articleindex;
+    // 작성자 아이디
     private String memberid;
-    // 글번호
-    private int id;
     // 제목
     private String title;
     // 내용
@@ -22,9 +22,9 @@ public class Article {
     // 조회수
     private int count;
 
-    public Article(String memberid, int id, String title, String content, String createtime, String modifytime, int count) {
+    public Article(int articleindex, String memberid, String title, String content, String createtime, String modifytime, int count) {
+        this.articleindex = articleindex;
         this.memberid = memberid;
-        this.id = id;
         this.title = title;
         this.content = content;
         this.createtime = createtime;
@@ -32,21 +32,21 @@ public class Article {
         this.count = count;
     }
 
-    // 아래는 생성된 객체가 사용할 수 있는 메서드이다.
+    // 아래는 생성된 객체가 사용할 수 있는 메서드이다 (ArrayList의 기능을 대체하는 것으로 보여진다)
+
+    public int getArticleIndex() {
+        return articleindex;
+    }
+
+    public void setArticleIndex(int articleindex) {
+        this.articleindex = articleindex;
+    }
     public String getMemberId() {
         return memberid;
     }
 
     public void setMemberId(String memberid) {
         this.memberid = memberid;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {

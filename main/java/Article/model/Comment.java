@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class Comment {
 
-    private int cid; // 댓글 PK id
+    // 댓글 PK id
+    private int cid;
 
     // 댓글이 작성된 글번호
     private int articleid;

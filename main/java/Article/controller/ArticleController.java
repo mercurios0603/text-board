@@ -11,6 +11,8 @@ public class ArticleController {
 
     // 기본적으로 콘트롤러에서 모든 DAO에 접속가능하다.
     // 콘트롤러는 게시판의 페이지와 같다. (회원 관련 페이지는 별도이기 때문에 MemberController로 분리된 것)
+    // 게시판에는 기사, 답글, 좋아요 등이 포함되어 있으므로 각각의 저장소(Dao)의 객체를 활용한다.
+    // 또한 View로 데이터를 내보내기도 한다.
 
     ArticleDao articleDao = new ArticleDao();
     CommentDao commentDao = new CommentDao();
@@ -70,10 +72,10 @@ public class ArticleController {
                 checkcount++;
                 article.setCount(checkcount);
 
-                ArrayList<Comment> comments = commentDao.findcommentById(article.getId());
-                Member member = memberDao.getMemberById(article.getMemberId());
-                Like like = likeDao.getLikeByArticleIdAndMemberId(article.getId(), sessionmember.getMemberId());
-                int likeCount = likeDao.getCountOfLikeByArticleId(article.getId());
+                ArrayList<Comment> comments = commentDao.findcommentById(article.getArticleIndex());
+                Member member = memberDao.getMemberById(sessionmember.getMemberId());
+                Like like = likeDao.getLikeByArticleIdAndMemberId(article.getArticleIndex(), sessionmember.getMemberId());
+                int likeCount = likeDao.getCountOfLikeByArticleId(article.getArticleIndex());
 
                 articleView.printArticleDetail(article, member, comments, likeCount, like);
                 DetailOption(article, member, comments);
@@ -109,7 +111,7 @@ public class ArticleController {
                 System.out.println("로그인 하셔야 사용할 수 있는 기능입니다.");
 
             } else {
-                Article findarticle = articleDao.findById(article.getId());
+                Article findarticle = articleDao.findById(article.getArticleIndex());
                 if (findarticle.getMemberId() == member.getMemberId()) {
 
                     Article target = findarticle;
@@ -138,7 +140,7 @@ public class ArticleController {
 
             } else {
 
-                Article findarticle = articleDao.findById(article.getId());
+                Article findarticle = articleDao.findById(article.getArticleIndex());
 
                 if (findarticle.getMemberId() == member.getMemberId()) {
 
@@ -176,18 +178,18 @@ public class ArticleController {
         // 좋아요 -> 어떤 게시물, 어떤 회원, 언제
         // 좋아요 여러개 -> 1번 게시물에 1번 유저, 1번 게시물에 2번 유저, 1번 게시물에 3번 유저, 2번 게시물에 1번 유저 ....
 
-        Like like = likeDao.getLikeByArticleIdAndMemberId(article.getId(), member.getMemberId());
+        Like like = likeDao.getLikeByArticleIdAndMemberId(article.getArticleIndex(), member.getMemberId());
 
         if(like == null) {
-            likeDao.insert(article.getId(), member.getMemberId());
+            likeDao.insert(article.getArticleIndex(), member.getMemberId());
             System.out.println("해당 게시물을 좋아합니다.");
         } else {
             likeDao.delete(like);
             System.out.println("해당 게시물의 좋아요를 해제합니다.");
         }
 
-        int likeCount = likeDao.getCountOfLikeByArticleId(article.getId());
-        like = likeDao.getLikeByArticleIdAndMemberId(article.getId(), member.getMemberId());
+        int likeCount = likeDao.getCountOfLikeByArticleId(article.getArticleIndex());
+        like = likeDao.getLikeByArticleIdAndMemberId(article.getArticleIndex(), member.getMemberId());
         articleView.printArticleDetail(article, member, replies, likeCount, like);
     }
 
@@ -203,7 +205,7 @@ public class ArticleController {
         } else {
             for (int i = 0; i < searcharticle.size(); i++) {
                 Article result = searcharticle.get(i);
-                System.out.println("번호: " + result.getId());
+                System.out.println("번호: " + result.getArticleIndex());
                 System.out.println("제목: " + result.getTitle());
                 System.out.println("---------------------");
             }

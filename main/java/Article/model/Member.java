@@ -1,12 +1,16 @@
 package Article.model;
 public class Member {
 
+    // 회원 PK
     private int memberindex;
 
+    // 회원 아이디
     private String memberid;
 
+    // 회원 패스워드
     private String memberpassword;
 
+    // 회언 닉네임
     private String membernickname;
 
     public Member(int memberindex, String memberid, String memberpassword, String membernickname) {
