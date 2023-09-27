@@ -228,6 +228,12 @@ public class ArticleController {
         return defaultvalue;
     }
 
+    public void page() {
+
+        ArrayList<Article> articlelist = articleDao.findAllArticles();
+
+    }
+
     // 정렬은 DAO의 기능을 쓰는 것이 아닌, 저장된 기사를 가져와서 배열만 바꾸는 것이므로 Controller 단에서 모두 해결함.
     public void sort() {
         System.out.print("정렬 대상을 선택해주세요. (1. 번호, 2.조회수) : " );

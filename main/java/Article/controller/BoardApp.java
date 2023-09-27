@@ -47,31 +47,27 @@ public class BoardApp {
             String func = scan.next();
 
             if (func.equals("add")) {
-
                 articleController.add(loginedmember);
 
             } else if (func.equals("list")) {
-
                 articleController.list();
 
             } else if (func.equals("sort")) {
-
                 articleController.sort();
 
-            }else if (func.equals("detail")) {
+            } else if (func.equals("page")) {
+                articleController.page();
 
+            } else if (func.equals("detail")) {
                 articleController.detail(loginedmember);
 
             } else if (func.equals("search")) {
-
                 articleController.search();
 
             } else if (func.equals("signup")) {
-
                 memberController.signup();
 
             } else if (func.equals("signin")) {
-
                 memberController.login();
 
             } else if (func.equals("exit")) {

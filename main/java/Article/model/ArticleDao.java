@@ -19,16 +19,25 @@ public class ArticleDao {
     ArticleView articleView = new ArticleView();
 
 
-    int listid = 4; // articles.size();
+    int listid = 8; // articles.size();
 
     // 생성자 초기값.
     public ArticleDao() {
         Article article1 = new Article(1, "홍길동", "안녕하세요 반갑습니다", "질문이에요", "2023.08.31 14:01:23", "2023.08.31 14:05:46", 156);
-        Article article2 = new Article(2, "김유신", "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 350);
-        Article article3 = new Article(3, "강감찬", "안녕용. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.11 09:23:05", "2023.09.11 09:30:25", 117);
+        Article article2 = new Article(2, "김유신", "자바 질문좀 할게요~", "질문내용입니다", "2023.09.04 15:43:36", "2023.09.04 15:47:55", 510);
+        Article article3 = new Article(3, "강감찬", "안녕이요. 정처기 따야되나요?", "스펙 질문입니다", "2023.09.06 19:23:35", "2023.09.07 09:30:25", 117);
+        Article article4 = new Article(4, "임꺽정", "출석체크 합니다.", "좋은 하루 보내세요", "2023.06.11 14:14:05", "2023.06.12 09:30:25", 356);
+        Article article5 = new Article(5, "한석봉", "붓글씨 글씨체 추천좀", "급함 빨리.", "2023.09.14 10:25:55", "2023.09.15 09:30:25", 287);
+        Article article6 = new Article(6, "정약용", "유머글 하나 올리고 갑니다", "유하하하하", "2023.09.11 20:16:45", "2023.09.14 09:30:25", 134);
+        Article article7 = new Article(7, "윤동주", "별 헤는 밤입니다.", "별 세고 싶은 날이네요", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 477);
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
+        articles.add(article4);
+        articles.add(article5);
+        articles.add(article6);
+        articles.add(article7);
+
     }
 
     public void insert(String sessionname, String title, String contents) {
