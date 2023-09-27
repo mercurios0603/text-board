@@ -1,13 +1,13 @@
 package Article.model;
 
-
 import Article.controller.ArticleController;
-import Article.model.Article;
 import Article.view.ArticleView;
 import util.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
+
 
 public class ArticleDao {
 
@@ -18,11 +18,6 @@ public class ArticleDao {
 
     ArticleView articleView = new ArticleView();
 
-    CommentDao commentDao = new CommentDao();
-
-    LikeDao likeDao = new LikeDao();
-
-    Scanner scan = new Scanner(System.in);
 
     int listid = 4; // articles.size();
 
@@ -74,6 +69,7 @@ public class ArticleDao {
     }
 
     public ArrayList<Article> findAllArticles() {
+
         return articles;
     }
 
@@ -113,5 +109,4 @@ public class ArticleDao {
 
         return searchKeyword;
     }
-
 }

@@ -4,7 +4,10 @@ import Article.model.*;
 import Article.view.ArticleView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
+import java.util.Comparator;
 
 
 public class ArticleController {
@@ -21,6 +24,7 @@ public class ArticleController {
     MemberDao memberDao = new MemberDao();
 
     ArticleView articleView = new ArticleView();
+
 
     Scanner scan = new Scanner(System.in);
 
@@ -84,7 +88,7 @@ public class ArticleController {
     }
 
 
-    public void DetailOption(Article article, Member member,  ArrayList<Comment> comment) {
+    public void DetailOption(Article article, Member member, ArrayList<Comment> comment) {
 
         System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : ");
         int optionnumber = getParamInt(scan.nextLine(), -1);
@@ -96,7 +100,7 @@ public class ArticleController {
             } else {
                 System.out.print("댓글을 작성해주세요 : ");
                 String inputcomment = scan.nextLine();
-                commentDao.insert(article.getArticleIndex(), member.getMemberNickname(),inputcomment);
+                commentDao.insert(article.getArticleIndex(), member.getMemberNickname(), inputcomment);
 
                 System.out.println("댓글이 정상적으로 등록되었습니다.");
             }
@@ -179,7 +183,7 @@ public class ArticleController {
 
         Like like = likeDao.getLikeByArticleIdAndMemberId(article.getArticleIndex(), member.getMemberId());
 
-        if(like == null) {
+        if (like == null) {
             likeDao.insert(article.getArticleIndex(), member.getMemberId());
             System.out.println("해당 게시물을 좋아합니다.");
         } else {
@@ -222,5 +226,88 @@ public class ArticleController {
             System.out.println("숫자만 입력 가능합니다.");
         }
         return defaultvalue;
+    }
+
+    // 정렬은 DAO의 기능을 쓰는 것이 아닌, 저장된 기사를 가져와서 배열만 바꾸는 것이므로 Controller 단에서 모두 해결함.
+    public void sort() {
+        System.out.print("정렬 대상을 선택해주세요. (1. 번호, 2.조회수) : " );
+        int targetsort = getParamInt(scan.nextLine(), -1);
+        System.out.print("정렬 방법을 선택해주세요. (1. 오름차순, 2. 내림차순) : ");
+        int methodsort = getParamInt(scan.nextLine(), -1);
+
+        ArrayList<Article> articleforsort = articleDao.findAllArticles();
+
+        if (targetsort == 1) {
+            ArticleSortById aci = new ArticleSortById(methodsort);
+            Collections.sort(articleforsort, aci);
+            articleView.printArticles(articleforsort);
+        } else {
+            ArticleSortByHit ach = new ArticleSortByHit(methodsort);
+            Collections.sort(articleforsort, ach);
+            articleView.printArticles(articleforsort);
+        }
+    }
+
+    public class ArticleSortById implements Comparator<Article>{
+
+        // 하나의 Comparator 클래스에서는 하나의 변수만 다룰 수 있음(?)
+        // ArrayList와 비슷하게 Article 클래스 객체에 정렬 커스터마이징
+        // Comparator는 Java에서 사용되는 인터페이스로, 객체들의 정렬을 커스터마이징할 때 유용하게 활용됩니다.
+        // Comparator를 구현하여 객체 간의 비교 규칙을 정의할 수 있습니다.
+
+        private int externalVariable; // 외부 변수
+
+        // 생성자를 통해 외부 변수를 받아옴
+        public ArticleSortById(int externalVariable) {
+            this.externalVariable = externalVariable;
+        }
+
+        @Override
+        public int compare(Article o1, Article o2) {
+
+            // Comparator은 반환값이 1, 0, -1에 좌우된다. 조건에 따라 부호를 변경하게 하면 가능할 것.
+            // 기본을 오름차순으로 하고 order를 통해 결과를 반전시킨다.
+            // 앞의 값이 더 크다면 -1을 반환해 자리를 유지하고 내림차순을 만들어라.
+            // 뒤의값이 더 커서 if문을 만족하지 못하면 오름차순 상태이니 1을 반환해 내림차순을 만들어라.
+
+            int order = 1; // 기본값은 오름차순
+
+            if (externalVariable == 2) {
+                order = -1; // externalVariable이 1이면 내림차순으로 변경
+            }
+            // Compare는 Comparator의 메서드임.
+            // 1을 Return 하면 자리를 바꿈, -1을 Return 하면 자리 유지.
+            // 오름차순 정렬방법 >, (내림차순의 경우 부등호만 변환 <)
+
+            if (o1.getArticleIndex() > o2.getArticleIndex()) { // 앞의 값이 더 크다면 1을 반환해 자리를 바꿔 오름차순을 만들어라.
+                return order; //
+            }
+            return -order;  // 뒤의 값이 더 커서 if문을 만족하지 못하면 오름차순인 상태이니, -1을 반환해 자리를 유지해라.
+        }
+    }
+
+    public class ArticleSortByHit implements Comparator<Article> {
+
+        private int externalVariable; // 외부 변수
+
+        // 생성자를 통해 외부 변수를 받아옴
+        public ArticleSortByHit(int externalVariable) {
+            this.externalVariable = externalVariable;
+        }
+
+        @Override
+        public int compare(Article o1, Article o2) {
+
+            int order = 1; // 기본값은 오름차순
+
+            if (externalVariable == 2) {
+                order = -1; // externalVariable이 1이면 내림차순으로 변경
+            }
+
+            if (o1.getCount() > o2.getCount()) {
+                return order; //
+            }
+            return -order;  //
+        }
     }
 }

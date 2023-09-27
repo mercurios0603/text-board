@@ -54,7 +54,11 @@ public class BoardApp {
 
                 articleController.list();
 
-            } else if (func.equals("detail")) {
+            } else if (func.equals("sort")) {
+
+                articleController.sort();
+
+            }else if (func.equals("detail")) {
 
                 articleController.detail(loginedmember);
 
