@@ -3,10 +3,7 @@ package Article.controller;
 import Article.model.*;
 import Article.view.ArticleView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
 import java.util.Comparator;
 
 
@@ -236,37 +233,90 @@ public class ArticleController {
 
     // 정렬은 DAO의 기능을 쓰는 것이 아닌, 저장된 기사를 가져와서 배열만 바꾸는 것이므로 Controller 단에서 모두 해결함.
     public void sort() {
-        System.out.print("정렬 대상을 선택해주세요. (1. 번호, 2.조회수) : " );
+        System.out.print("정렬 대상을 선택해주세요. (1. 번호, 2.조회수) : ");
         int targetsort = getParamInt(scan.nextLine(), -1);
         System.out.print("정렬 방법을 선택해주세요. (1. 오름차순, 2. 내림차순) : ");
         int methodsort = getParamInt(scan.nextLine(), -1);
 
         ArrayList<Article> articleforsort = articleDao.findAllArticles();
 
-        if (targetsort == 1) {
-            ArticleSortById aci = new ArticleSortById(methodsort);
-            Collections.sort(articleforsort, aci);
-            articleView.printArticles(articleforsort);
-        } else {
-            ArticleSortByHit ach = new ArticleSortByHit(methodsort);
-            Collections.sort(articleforsort, ach);
-            articleView.printArticles(articleforsort);
+        Collections.sort(articleforsort, new SortFactory().getSort(targetsort).setDirection(methodsort));
+        // 여기에서 sort는 Collections의 메서드임 (아래 클래스의 Sort가 아님 시작글자 대문자)
+        // getSort 하는 순간 입력값(targetsort)에 따라 Sort 객체인 ArticleSortById 또는 ArticleSortByHit 객체가 반환된다.
+        // 이 객체들은 sort의 자식이기 때문에 부모의 메서드인 setDirection() 을 사용할 있게 되는 것이다.
+
+        // new SortFactory().getSort(targetsort).setDirection(methodsort) 표현식에서 메서드의 작동 순서는 다음과 같이 됩니다:
+        // (1) new SortFactory(): SortFactory 클래스의 새로운 인스턴스를 생성합니다.
+        // (2) getSort(targetsort): SortFactory 인스턴스의 getSort 메서드를 호출하여 targetsort에 해당하는 Sort 객체를 얻습니다.
+        // 이때, targetsort에 따라 ArticleSortById 또는 ArticleSortByHit 객체가 반환됩니다. (상속 때문에 가능함. 이들은 Sort 객체로 취급되기 때문에 Sort 메서드 사용가능!)
+        // (3) setDirection(methodsort): 앞서 얻은 Sort 객체의 setDirection 메서드를 호출하여 methodsort에 따라 정렬 방향을 설정하고, 이 Sort 객체를 반환합니다.
+        // 이렇게 반환된 Sort 객체를 사용하여 Collections.sort(articleforsort, ...)에서 정렬을 수행합니다.
+        // 정렬 동작에서는 Sort 객체의 setDirection 메서드에서 설정한 방향 설정이 적용되며, 실제 정렬 로직은 Sort 객체의 compare 메서드에서 처리됩니다.
+
+        // setDirection(methodsort)를 실행할 때, 먼저 Sort 클래스의 setDirection 메서드가 호출됩니다.
+        // 이 메서드 내에서 order 값을 설정하고, this를 반환합니다.
+        // 그런 다음 getSort(targetsort) 메서드에서 반환한 객체는 setDirection 메서드의 결과인 this를 가지고 있습니다.
+        // 이후 Collections.sort(articleforsort, new SortFactory().getSort(targetsort).setDirection(methodsort)) 라인에서는
+        // new SortFactory().getSort(targetsort)을 통해 얻은 객체(여기서는 ArticleSortById 또는 ArticleSortByHit 객체)가
+        // setDirection(methodsort) 메서드의 결과인 this를 가지고 있으므로, 실제 정렬 시에는 Sort 클래스의 setDirection 메서드가 먼저 호출되고,
+        // 그 다음에 ArticleSortById 또는 ArticleSortByHit 클래스의 compare 메서드가 호출됩니다.
+        // 이렇게 상속과 오버라이드가 동작하여 부모 클래스와 자식 클래스의 메서드가 혼합되어 사용됩니다.
+        // 결과적으로 Sort 클래스의 setDirection에서 설정한 order 값이 정렬 동작에 영향을 미치게 됩니다.
+
+        articleView.printArticles(articleforsort);
+
+        // 아래의 반복되고 공통되는 부분을 제거하기 위해 상속, 다형성을 이용하였음
+//        if (targetsort == 1) {
+//            // ArticleSortById aci = new ArticleSortById(methodsort);
+//            Collections.sort(articleforsort, new ArticleSortById(methodsort));
+//            articleView.printArticles(articleforsort);
+//
+//        } else {
+//            // ArticleSortByHit ach = new ArticleSortByHit(methodsort);
+//            Collections.sort(articleforsort, new ArticleSortByHit(methodsort));
+//            articleView.printArticles(articleforsort);
+//        }
+    }
+
+    class Sort {
+        protected int order = 1;
+
+        // direction 값에 따라 order의 초기값이 오름차순, 내림차순에 영향을 미치게 되므로 if 분기로 나눔.
+        Comparator<Article> setDirection(int direction) {
+            if (direction == 2) {
+                order = -1;
+            }
+
+            return (Comparator<Article>) this;
         }
     }
 
-    public class ArticleSortById implements Comparator<Article>{
+    class SortFactory {
+
+
+        Map<Integer, Sort> sortMap = new HashMap<>();
+        // 해쉬맵 계열. 정수형과 Sort형을 매칭하여 저장하겠다는 뜻.
+
+        SortFactory() {
+            sortMap.put(1, new ArticleSortById());
+            sortMap.put(2, new ArticleSortByHit());
+        }
+
+        //Sort형으로 선언하고 ArticleSortById 또는 ArticleSortByHit을 넣을 수 있는 이유는
+        //상속(extend)으로 인해 Sort가 두 클래스의 부모이기 때문에, 자식 객체를 부모 대신 사용할 수 있는 것.
+
+        public Sort getSort(int sortTarget) {
+            return sortMap.get(sortTarget);
+        }
+    }
+
+    public class ArticleSortById extends Sort implements Comparator<Article> {
 
         // 하나의 Comparator 클래스에서는 하나의 변수만 다룰 수 있음(?)
         // ArrayList와 비슷하게 Article 클래스 객체에 정렬 커스터마이징
         // Comparator는 Java에서 사용되는 인터페이스로, 객체들의 정렬을 커스터마이징할 때 유용하게 활용됩니다.
         // Comparator를 구현하여 객체 간의 비교 규칙을 정의할 수 있습니다.
 
-        private int externalVariable; // 외부 변수
-
-        // 생성자를 통해 외부 변수를 받아옴
-        public ArticleSortById(int externalVariable) {
-            this.externalVariable = externalVariable;
-        }
 
         @Override
         public int compare(Article o1, Article o2) {
@@ -276,39 +326,17 @@ public class ArticleController {
             // 앞의 값이 더 크다면 -1을 반환해 자리를 유지하고 내림차순을 만들어라.
             // 뒤의값이 더 커서 if문을 만족하지 못하면 오름차순 상태이니 1을 반환해 내림차순을 만들어라.
 
-            int order = 1; // 기본값은 오름차순
-
-            if (externalVariable == 2) {
-                order = -1; // externalVariable이 1이면 내림차순으로 변경
-            }
-            // Compare는 Comparator의 메서드임.
-            // 1을 Return 하면 자리를 바꿈, -1을 Return 하면 자리 유지.
-            // 오름차순 정렬방법 >, (내림차순의 경우 부등호만 변환 <)
-
             if (o1.getArticleIndex() > o2.getArticleIndex()) { // 앞의 값이 더 크다면 1을 반환해 자리를 바꿔 오름차순을 만들어라.
-                return order; //
-            }
+                return order; //                               // 입력값이 2인 상태로 내림차순을 만들 때는 order의 기본값이 -1이다.
+            }                                                  // 따라서 order가 앞의 값이 클 때(내림차순) -1을 반환하면 자리를 유지한다.
             return -order;  // 뒤의 값이 더 커서 if문을 만족하지 못하면 오름차순인 상태이니, -1을 반환해 자리를 유지해라.
-        }
-    }
+        }                   // 입력값이 2인 상태에서 내림차순을 만들 때는 order의 기본값이 -1이다.
+    }                       // 만약 뒤의 값이 더 크다면 오름차순 상태이니 1을 반환해 자리를 바꿔 내림차순을 만들어라.
 
-    public class ArticleSortByHit implements Comparator<Article> {
-
-        private int externalVariable; // 외부 변수
-
-        // 생성자를 통해 외부 변수를 받아옴
-        public ArticleSortByHit(int externalVariable) {
-            this.externalVariable = externalVariable;
-        }
+    public class ArticleSortByHit extends Sort implements Comparator<Article> {
 
         @Override
         public int compare(Article o1, Article o2) {
-
-            int order = 1; // 기본값은 오름차순
-
-            if (externalVariable == 2) {
-                order = -1; // externalVariable이 1이면 내림차순으로 변경
-            }
 
             if (o1.getCount() > o2.getCount()) {
                 return order; //
