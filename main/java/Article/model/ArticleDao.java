@@ -37,7 +37,6 @@ public class ArticleDao {
         articles.add(article5);
         articles.add(article6);
         articles.add(article7);
-
     }
 
     public void insert(String sessionname, String title, String contents) {

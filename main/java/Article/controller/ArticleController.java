@@ -20,6 +20,8 @@ public class ArticleController {
 
     MemberDao memberDao = new MemberDao();
 
+    Pagination pagination =  new Pagination();
+
     ArticleView articleView = new ArticleView();
 
 
@@ -225,12 +227,6 @@ public class ArticleController {
         return defaultvalue;
     }
 
-    public void page() {
-
-        ArrayList<Article> articlelist = articleDao.findAllArticles();
-
-    }
-
     // 정렬은 DAO의 기능을 쓰는 것이 아닌, 저장된 기사를 가져와서 배열만 바꾸는 것이므로 Controller 단에서 모두 해결함.
     public void sort() {
         System.out.print("정렬 대상을 선택해주세요. (1. 번호, 2.조회수) : ");
@@ -292,8 +288,6 @@ public class ArticleController {
     }
 
     class SortFactory {
-
-
         Map<Integer, Sort> sortMap = new HashMap<>();
         // 해쉬맵 계열. 정수형과 Sort형을 매칭하여 저장하겠다는 뜻.
 
@@ -342,6 +336,33 @@ public class ArticleController {
                 return order; //
             }
             return -order;  //
+        }
+    }
+
+    public void page() {
+
+        while(true) {
+            System.out.println(" ");
+            System.out.print("페이징 명령어를 입력해주세요 ((1. 이전, 2. 다음, 3. 선택, 4. 뒤로가기) : ");
+            int pageCmd = getParamInt(scan.nextLine(), 1);
+
+            switch (pageCmd) {
+                case 3:
+                    System.out.print("보고 싶은 페이지 번호를 입력해주세요 : ");
+                    int pageNo = getParamInt(scan.nextLine(), 1);
+
+                    pagination.selectPage(pageNo);
+
+                    ArrayList<Article> articlelist = articleDao.findAllArticles();
+                    articleView.printPagedArticles(articlelist, pagination);
+
+                    break;
+            }
+
+            if (pageCmd == 4) {
+                System.out.println("페이지 메뉴를 나갑니다.");
+                break;
+            }
         }
     }
 }
