@@ -30,6 +30,20 @@ public class ArticleDao {
         Article article5 = new Article(5, "한석봉", "붓글씨 글씨체 추천좀", "급함 빨리.", "2023.09.14 10:25:55", "2023.09.15 09:30:25", 287);
         Article article6 = new Article(6, "정약용", "유머글 하나 올리고 갑니다", "유하하하하", "2023.09.11 20:16:45", "2023.09.14 09:30:25", 134);
         Article article7 = new Article(7, "윤동주", "별 헤는 밤입니다.", "별 세고 싶은 날이네요", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 477);
+        Article article8 = new Article(8, "작성자8", "제목8.", "내용8", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 345);
+        Article article9 = new Article(9, "작성자9", "제목9.", "내용9", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 124);
+        Article article10 = new Article(10, "작성자10", "제목10.", "내용10", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 872);
+        Article article11 = new Article(11, "작성자11", "제목11.", "내용11", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 632);
+        Article article12 = new Article(12, "작성자12", "제목12.", "내용12", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 120);
+        Article article13 = new Article(13, "작성자13", "제목13.", "내용13", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 445);
+        Article article14 = new Article(14, "작성자14", "제목14.", "내용14", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 777);
+        Article article15 = new Article(15, "작성자15", "제목15.", "내용15", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 231);
+        Article article16 = new Article(16, "작성자16", "제목16.", "내용16", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 236);
+        Article article17 = new Article(17, "작성자17", "제목17.", "내용17", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 442);
+        Article article18 = new Article(18, "작성자18", "제목18.", "내용18", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 477);
+        Article article19 = new Article(19, "작성자19", "제목19.", "내용19", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 551);
+        Article article20 = new Article(20, "작성자20", "제목20.", "내용20", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 921);
+        Article article21 = new Article(21, "작성자21", "제목21.", "내용21", "2023.04.05 11:23:05", "2023.04.11 09:30:25", 816);
         articles.add(article1);
         articles.add(article2);
         articles.add(article3);
@@ -37,6 +51,20 @@ public class ArticleDao {
         articles.add(article5);
         articles.add(article6);
         articles.add(article7);
+        articles.add(article8);
+        articles.add(article9);
+        articles.add(article10);
+        articles.add(article11);
+        articles.add(article12);
+        articles.add(article13);
+        articles.add(article14);
+        articles.add(article15);
+        articles.add(article16);
+        articles.add(article17);
+        articles.add(article18);
+        articles.add(article19);
+        articles.add(article20);
+        articles.add(article21);
     }
 
     public void insert(String sessionname, String title, String contents) {

@@ -341,25 +341,37 @@ public class ArticleController {
 
     public void page() {
 
+        ArrayList<Article> articlelist = articleDao.findAllArticles();
+        articleView.printPagedArticles(articlelist, pagination);
+
         while(true) {
             System.out.println(" ");
             System.out.print("페이징 명령어를 입력해주세요 ((1. 이전, 2. 다음, 3. 선택, 4. 뒤로가기) : ");
             int pageCmd = getParamInt(scan.nextLine(), 1);
 
             switch (pageCmd) {
+
+                case 1:
+                    pagination.prevPage();
+                    break;
+
+                case 2:
+                    pagination.nextPage();
+                    break;
+
                 case 3:
                     System.out.print("보고 싶은 페이지 번호를 입력해주세요 : ");
                     int pageNo = getParamInt(scan.nextLine(), 1);
 
                     pagination.selectPage(pageNo);
-
-                    ArrayList<Article> articlelist = articleDao.findAllArticles();
-                    articleView.printPagedArticles(articlelist, pagination);
-
                     break;
             }
 
+            articleView.printPagedArticles(articlelist, pagination);
+
+
             if (pageCmd == 4) {
+                System.out.println(" ");
                 System.out.println("페이지 메뉴를 나갑니다.");
                 break;
             }

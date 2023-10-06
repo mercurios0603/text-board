@@ -70,6 +70,7 @@ public class ArticleView {
             System.out.println("==================");
         }
 
+        // 현재 선택한 페이지를 []로 보여주기 위한 for 반복문
         for(int i = pagination.getStartPageNo(); i <= pagination.getEndPageNo(); i++) {
             if (i == pagination.getCurrentPageNo()) {
                 System.out.print("[" + i +"]" + " ");
