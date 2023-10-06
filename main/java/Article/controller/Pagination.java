@@ -71,4 +71,22 @@ public class Pagination {
             currentPageNo = pageNo;                   // 사용자가 입력한 번호가 곧 현재 페이지 (보고 싶어하는 페이지가 된다)
         }
     }
+
+    public int getLastPageBlockNo() {
+        return (int)(Math.ceil((double)getTotalPageNo() / pageCntPerBlock));
+    }
+
+    public boolean hasNextBlock() {
+        if(getPageBlockNo() < getLastPageBlockNo()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasPrevBlock() {
+        if(getPageBlockNo() > 1) {
+            return true;
+        }
+        return false;
+    }
 }

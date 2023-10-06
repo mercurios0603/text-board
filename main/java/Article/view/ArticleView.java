@@ -71,6 +71,10 @@ public class ArticleView {
         }
 
         // 현재 선택한 페이지를 []로 보여주기 위한 for 반복문
+
+        if(pagination.hasPrevBlock())
+            System.out.print("<< ");
+
         for(int i = pagination.getStartPageNo(); i <= pagination.getEndPageNo(); i++) {
             if (i == pagination.getCurrentPageNo()) {
                 System.out.print("[" + i +"]" + " ");
@@ -78,5 +82,8 @@ public class ArticleView {
                 System.out.print(i + " ");
             }
         }
+
+        if(pagination.hasNextBlock())
+            System.out.printf(">>");
     }
 }
